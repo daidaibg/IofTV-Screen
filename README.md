@@ -32,7 +32,7 @@ github地址
 [https://github.com/daidaibg/IofTV-Screen](https://github.com/daidaibg/IofTV-Screen)
 Gitee地址
 
-暂无
+[https://gitee.com/memeda520/IofTV-Screen](https://gitee.com/memeda520/IofTV-Screen)
 
 ##  2、主要文件介绍
 
