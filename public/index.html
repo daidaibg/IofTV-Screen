@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <link href="./style.css" rel="stylesheet">
+
+  <script type="text/javascript">
+    window._AMapSecurityConfig = {
+      // 例如 ：serviceHost:'http://1.1.1.1:80/_AMapService',
+      securityJsCode: '31ee22a95ccff1187e93bd4d7ee5de54'
+    }
+  </script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.2.2/echarts.min.js"></script>
+  <title>
+    大屏
+  </title>
+
+</head>
+
+<body>
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+        Please enable it to continue.</strong>
+  </noscript>
+  <div id="app">
+    <div class="container_nomount">
+      <div class="loading">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <h2>Loading...</h2>
+    </div>
+
+  </div>
+  <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=67ff4344ba8815a5960ffca4d3f81a9d"></script>
+  <!-- built files will be auto injected -->
+</body>
+
+</html>

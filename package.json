@@ -1,0 +1,39 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve --mode dev",
+    "start": "vue-cli-service serve --mode dev ",
+    "build": "vue-cli-service build --mode production",
+    "report": "vue-cli-service build --report",
+    "build:yh": "vue-cli-service build --mode yh"
+
+  },
+  "dependencies": {
+    "@jiaminghi/data-view": "^2.10.0",
+    "axios": "^0.24.0",
+    "element-ui": "^2.15.6",
+    "vue": "^2.6.11",
+    "vue-easytable": "^2.14.0",
+    "vue-router": "^3.2.0",
+    "vue-seamless-scroll": "^1.1.23",
+    "vuex": "^3.4.0",
+    "yhht-ui": "^1.2.10"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "babel-plugin-component": "^1.1.1",
+    "mockjs": "^1.1.0",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^8.0.2",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
