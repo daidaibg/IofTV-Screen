@@ -25,7 +25,7 @@
 
 **项目展示** 
 
-![项目展示](https://github.com/daidaibg/IofTV-Screen/blob/main/public/test.png)
+![项目展示](https://gitee.com/memeda520/IofTV-Screen/blob/main/public/test.png)
 
 **项目预览地址**
 
