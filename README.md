@@ -25,7 +25,7 @@
 
 **项目展示** 
 
-![项目展示](https://gitee.com/memeda520/IofTV-Screen/raw/main/public/test.png)
+![请添加图片描述](https://img-blog.csdnimg.cn/6ac8ece3325d4533b56c94616706f663.png)
 
 
 **项目预览地址**
