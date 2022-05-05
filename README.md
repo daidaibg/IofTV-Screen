@@ -23,14 +23,19 @@
 4. [mock.js官网](http://mockjs.com/examples.html)
 5. [axios官网](https://axios-http.com/)
 
+**预览**
+
+![image-20220505101155684](public\test.png)
+
 **项目预览地址**
 
 [https://www.daidaibg.com/bigscreen](https://www.daidaibg.com/bigscreen)
 
-github地址
+**github地址**
 
 [https://github.com/daidaibg/IofTV-Screen](https://github.com/daidaibg/IofTV-Screen)
-Gitee地址
+
+**Gitee地址**
 
 [https://gitee.com/memeda520/IofTV-Screen](https://gitee.com/memeda520/IofTV-Screen)
 
