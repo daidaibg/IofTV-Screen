@@ -20,9 +20,8 @@
 1. [Vue 官方文档](https://gitee.com/link?target=https%3A%2F%2Fcn.vuejs.org%2Fv2%2Fguide%2Finstance.html)
 2. [DataV 官方文档](https://gitee.com/link?target=http%3A%2F%2Fdatav.jiaminghi.com%2Fguide%2F)
 3. [echarts 实例](https://gitee.com/link?target=https%3A%2F%2Fecharts.apache.org%2Fexamples%2Fzh%2Findex.html)，[echarts API 文档](https://gitee.com/link?target=https%3A%2F%2Fecharts.apache.org%2Fzh%2Fapi.html%23echarts)
-4. [项目 gitee 地址（国内速度快）](https://gitee.com/MTrun/big-screen-vue-datav)
-5. [mock.js官网](http://mockjs.com/examples.html)
-6. [axios官网](https://axios-http.com/)
+4. [mock.js官网](http://mockjs.com/examples.html)
+5. [axios官网](https://axios-http.com/)
 
 **项目预览地址**
 
