@@ -23,9 +23,9 @@
 4. [mock.js官网](http://mockjs.com/examples.html)
 5. [axios官网](https://axios-http.com/)
 
-**预览**
+**项目展示** 
 
-![image-20220505101155684](\public\test.png)
+![项目展示](https://github.com/daidaibg/IofTV-Screen/blob/main/public/test.png)
 
 **项目预览地址**
 
