@@ -2,18 +2,24 @@
  * @Author: daidai
  * @Date: 2022-03-01 14:13:04
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-04-28 15:05:05
+ * @LastEditTime: 2022-05-07 11:17:49
  * @FilePath: \web-pc\src\pages\big-screen\view\indexs\right-top.vue
 -->
 <template>
-  <Echart id="rightTop" :options="option" class="right_top_inner" v-if="pageflag"  ref="charts"/>
-  <Reacquire v-else @onclick="getData" style="line-height:200px">
+  <Echart
+    id="rightTop"
+    :options="option"
+    class="right_top_inner"
+    v-if="pageflag"
+    ref="charts"
+  />
+  <Reacquire v-else @onclick="getData" style="line-height: 200px">
     重新获取
   </Reacquire>
 </template>
 
 <script>
-import { currentGET } from 'api/modules'
+import { currentGET } from "api/modules";
 
 export default {
   data() {
@@ -24,65 +30,66 @@ export default {
     };
   },
   created() {
-    this.getData()
+    this.getData();
   },
 
-  mounted() {
-  },
+  mounted() {},
   beforeDestroy() {
-    this.clearData()
-
+    this.clearData();
   },
   methods: {
-    
     clearData() {
       if (this.timer) {
-        clearInterval(this.timer)
-        this.timer = null
+        clearInterval(this.timer);
+        this.timer = null;
       }
     },
     getData() {
-      this.pageflag = true
+      this.pageflag = true;
       // this.pageflag =false
-      currentGET('big4').then(res => {
-        if(!this.timer){
-        console.log('报警次数', res);
-
+      currentGET("big4").then((res) => {
+        if (!this.timer) {
+          console.log("报警次数", res);
         }
         if (res.success) {
-          this.countUserNumData = res.data
+          this.countUserNumData = res.data;
           this.$nextTick(() => {
-            this.init(res.data.dateList, res.data.numList),
-            this.switper()
-          })
-
+            this.init(res.data.dateList, res.data.numList, res.data.numList2),
+              this.switper();
+          });
         } else {
-          this.pageflag = false
+          this.pageflag = false;
           this.$Message({
             text: res.msg,
-            type: 'warning'
-          })
+            type: "warning",
+          });
         }
-      })
+      });
     },
     //轮询
     switper() {
       if (this.timer) {
-        return
+        return;
       }
       let looper = (a) => {
-        this.getData()
+        this.getData();
       };
-      this.timer = setInterval(looper, this.$store.state.setting.echartsAutoTime);
-      let myChart = this.$refs.charts.chart
-      myChart.on('mouseover', params => {
-        this.clearData()
+      this.timer = setInterval(
+        looper,
+        this.$store.state.setting.echartsAutoTime
+      );
+      let myChart = this.$refs.charts.chart;
+      myChart.on("mouseover", (params) => {
+        this.clearData();
       });
-      myChart.on('mouseout', params => {
-        this.timer = setInterval(looper, this.$store.state.setting.echartsAutoTime);
+      myChart.on("mouseout", (params) => {
+        this.timer = setInterval(
+          looper,
+          this.$store.state.setting.echartsAutoTime
+        );
       });
     },
-    init(xData, yData) {
+    init(xData, yData, yData2) {
       this.option = {
         xAxis: {
           type: "category",
@@ -101,7 +108,6 @@ export default {
             },
           },
           axisLabel: {
-            
             color: "#7EB7FD",
             fontWeight: "500",
           },
@@ -148,7 +154,7 @@ export default {
             type: "line",
             smooth: true,
             symbol: "none", //去除点
-            name: '雷击次数',
+            name: "报警1次数",
             color: "rgba(252,144,16,.7)",
             areaStyle: {
               normal: {
@@ -186,10 +192,12 @@ export default {
                   },
                   label: {
                     color: "#FC9010",
-                    backgroundColor: "#0F3270",
+                    backgroundColor: "rgba(252,144,16,0.1)",
                     borderRadius: 6,
                     padding: [7, 14],
-                    formatter: "次数：{c}",
+                    borderWidth: 0.5,
+                    borderColor: "rgba(252,144,16,.5)",
+                    formatter: "报警1：{c}",
                   },
                 },
                 {
@@ -210,6 +218,76 @@ export default {
               ],
             },
           },
+          {
+            data: yData2,
+            type: "line",
+            smooth: true,
+            symbol: "none", //去除点
+            name: "报警2次数",
+            color: "rgba(9,202,243,.7)",
+            areaStyle: {
+              normal: {
+                //右，下，左，上
+                color: new echarts.graphic.LinearGradient(
+                  0,
+                  0,
+                  0,
+                  1,
+                  [
+                    {
+                      offset: 0,
+                      color: "rgba(9,202,243,.7)",
+                    },
+                    {
+                      offset: 1,
+                      color: "rgba(9,202,243,.0)",
+                    },
+                  ],
+                  false
+                ),
+              },
+            },
+            markPoint: {
+              data: [
+                {
+                  name: "最大值",
+                  type: "max",
+                  valueDim: "y",
+                  symbol: "rect",
+                  symbolSize: [60, 26],
+                  symbolOffset: [0, -20],
+                  itemStyle: {
+                    color: "rgba(0,0,0,0)",
+                  },
+                  label: {
+                    color: "#09CAF3",
+                    backgroundColor: "rgba(9,202,243,0.1)",
+
+                    borderRadius: 6,
+                    borderColor: "rgba(9,202,243,.5)",
+                    padding: [7, 14],
+                    formatter: "报警2：{c}",
+                    borderWidth: 0.5,
+                  },
+                },
+                {
+                  name: "最大值",
+                  type: "max",
+                  valueDim: "y",
+                  symbol: "circle",
+                  symbolSize: 6,
+                  itemStyle: {
+                    color: "#09CAF3",
+                    shadowColor: "#09CAF3",
+                    shadowBlur: 8,
+                  },
+                  label: {
+                    formatter: "",
+                  },
+                },
+              ],
+            },
+          },
         ],
       };
     },
@@ -220,5 +298,4 @@ export default {
 .right_top_inner {
   margin-top: -8px;
 }
-
 </style>

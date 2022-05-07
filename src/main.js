@@ -2,14 +2,14 @@
  * @Author: daidai
  * @Date: 2022-01-12 14:05:56
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-04-28 16:34:10
+ * @LastEditTime: 2022-05-07 11:03:31
  * @FilePath: \web-pc\src\pages\big-screen\main.js
  */
 import Vue from "vue";
 import App from "./App.vue";
 import router from './router'
 import store from './store'
-import {loading,borderBox13,digitalFlop,capsuleChart} from '@jiaminghi/data-view'
+import {loading,borderBox13,digitalFlop,capsuleChart,borderBox8} from '@jiaminghi/data-view'
 import { Radio,Button,RadioGroup } from 'element-ui'
 import Echart from './components/echart/index.vue'
 import ItemWrap from './components/item-wrap/item-wrap.vue'
@@ -38,6 +38,7 @@ Vue.use(RadioGroup)
 // datav组件
 Vue.use(loading)
 Vue.use(borderBox13)
+Vue.use(borderBox8)
 Vue.use(digitalFlop)
 Vue.use(capsuleChart)
 // 全局数据过滤器
