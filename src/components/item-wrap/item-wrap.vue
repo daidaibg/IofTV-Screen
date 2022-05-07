@@ -2,17 +2,19 @@
  * @Author: daidai
  * @Date: 2022-03-01 09:16:22
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-04-27 18:17:22
+ * @LastEditTime: 2022-05-07 11:06:23
  * @FilePath: \web-pc\src\pages\big-screen\components\item-wrap\item-wrap.vue
 -->
 <template>
   <dv-border-box-13 class="lr_titles">
-     <div class="item_title" v-if="title !== ''">
+    <div class="item_title" v-if="title !== ''">
       <div class="zuo"></div>
-      <span> &nbsp;&nbsp;{{ title }}&nbsp;&nbsp; </span>
+      <span class="title-inner"> &nbsp;&nbsp;{{ title }}&nbsp;&nbsp; </span>
       <div class="you"></div>
     </div>
-    <div :class="title !== '' ? 'item_title_content' : 'item_title_content_def'">
+    <div
+      :class="title !== '' ? 'item_title_content' : 'item_title_content_def'"
+    >
       <slot></slot>
     </div>
   </dv-border-box-13>
@@ -28,11 +30,10 @@ export default {
       type: String,
       default: () => "",
     },
-
   },
-  created() { },
+  created() {},
 
-  mounted() { },
+  mounted() {},
   methods: {},
 };
 </script>
@@ -41,7 +42,6 @@ $item-title-height: 38px;
 $item_title_content-height: calc(100% - 38px);
 
 .lr_titles {
-
   box-sizing: border-box;
 
   /deep/.border-box-content {
@@ -71,6 +71,18 @@ $item_title_content-height: calc(100% - 38px);
     .you {
       transform: rotate(180deg);
     }
+    .title-inner {
+      font-weight: 900;
+      letter-spacing: 2px;
+      background: linear-gradient(
+        92deg,
+        #0072ff 0%,
+        #00eaff 48.8525390625%,
+        #01aaff 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
   }
 
   .item_title_content {
@@ -82,5 +94,4 @@ $item_title_content-height: calc(100% - 38px);
     height: 100%;
   }
 }
-
 </style>

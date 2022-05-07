@@ -8,7 +8,6 @@
     "build": "vue-cli-service build --mode production",
     "report": "vue-cli-service build --report",
     "build:yh": "vue-cli-service build --mode yh"
-
   },
   "dependencies": {
     "@jiaminghi/data-view": "^2.10.0",

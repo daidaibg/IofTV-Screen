@@ -115,6 +115,9 @@ function alarmNum() {
             dateList:['2021-11', '2021-12', '2022-01', '2022-02', '2022-03',"2022-04"],
             "numList|6":[
                 '@integer(0, 1000)'
+            ],
+            "numList2|6":[
+                '@integer(0, 1000)'
             ]
         }
     })
@@ -178,7 +181,14 @@ Mock.mock(new RegExp('installationPlan'), 'get', installationPlan)
 function ranking() {
    //多生成几个避免重复 重复会报错
   let num =Mock.mock({"list|48":[{ value:"@integer(50,1000)",name:"@city()"}]}).list
-  let newNum = Random.pick(num,8)
+//   console.log(num);
+  let newNum =[],numObj={}
+  num.map(item=>{
+    if(!numObj[item.name] && newNum.length<8){
+        numObj[item.name] =true
+        newNum.push(item)
+    }
+  })
   let arr = newNum.sort((a,b)=>{
     return b.value-a.value
   })

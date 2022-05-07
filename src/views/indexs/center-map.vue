@@ -2,7 +2,7 @@
  * @Author: daidai
  * @Date: 2022-03-01 11:17:39
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-04-27 18:20:07
+ * @LastEditTime: 2022-05-07 10:59:56
  * @FilePath: \web-pc\src\pages\big-screen\view\indexs\center-map.vue
 -->
 <template>
@@ -147,12 +147,12 @@ export default {
           inRange: {
             // 渐变颜色，从小到大
             color: [
-              "#3FF4FF",
-              "#bacae8",
-              "#96b5ef",
-              "#6797ef",
-              "#3375e4",
-              "#035cf5",
+              "#c3d7df",
+              "#5cb3cc",
+              "#8abcd1",
+              "#66a9c9",
+              "#2f90b9",
+              "#1781b5",
             ],
           },
           textStyle: {

@@ -2,15 +2,15 @@
  * @Author: daidai
  * @Date: 2022-03-04 09:23:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-04-28 15:24:37
+ * @LastEditTime: 2022-05-07 11:05:02
  * @FilePath: \web-pc\src\pages\big-screen\view\indexs\index.vue
 -->
 <template>
   <div class="contents">
     <div class="contetn_left">
       <div class="pagetab">
-        <div class="item">实时监测</div>
-        <div class="item">统计分析</div>
+        <!-- <div class="item">实时监测</div> -->
+        
       </div>
       <ItemWrap class="contetn_left-top contetn_lr-item" title="设备总览">
         <LeftTop/>
@@ -42,14 +42,14 @@
       </ItemWrap>
       <ItemWrap
         class="contetn_left-bottom contetn_lr-item"
-        title="数据统计图"
+        title="报警排名(TOP8)"
         style="padding: 0 10px 16px 10px"
       >
         <RightCenter />
       </ItemWrap>
       <ItemWrap
         class="contetn_left-bottom contetn_lr-item"
-        title="报警排名(TOP8)"
+        title="数据统计图 "
       >
         <RightBottom />
       </ItemWrap>

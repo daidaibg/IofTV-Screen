@@ -25,7 +25,7 @@
 
 **项目展示** 
 
-![请添加图片描述](https://img-blog.csdnimg.cn/6ac8ece3325d4533b56c94616706f663.png)
+![项目展示](https://img-blog.csdnimg.cn/f0b09cd868ae462d80807270b49210bb.png)
 
 
 **项目预览地址**
