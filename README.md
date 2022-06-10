@@ -40,6 +40,23 @@
 
 [https://gitee.com/memeda520/IofTV-Screen](https://gitee.com/memeda520/IofTV-Screen)
 
+
+
+###  1.1滚动设置，自适应设置 
+
+项目中可以进行滚动配置，内容是否滚动
+
+点击右上角设置按钮
+![设置](https://img-blog.csdnimg.cn/436e28d054bd475d9edfd41471f88441.png)
+
+
+
+可以进行以下配置，可以自行代码中进行修改或增加配置
+
+
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/564c304c4b2249b1a525558eeb986497.png)
+
 ##  2、主要文件介绍
 
 | 文件              | 作用/功能                                                    |
