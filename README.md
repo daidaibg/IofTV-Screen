@@ -149,3 +149,10 @@ this.$Message.warning(res.msg)
 {{10.23123|montionFilter }}
 ```
 
+##  五、交流反馈（面条的群）
+
+QQ群号：713105837
+
+QQ群二维码：
+
+![输入图片说明](https://gitee.com/MTrun/big-screen-vue-datav/raw/master/public/image.png)
