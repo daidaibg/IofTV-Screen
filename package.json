@@ -17,8 +17,7 @@
     "vue-easytable": "^2.14.0",
     "vue-router": "^3.2.0",
     "vue-seamless-scroll": "^1.1.23",
-    "vuex": "^3.4.0",
-    "yhht-ui": "^1.2.10"
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-router": "~4.5.0",
