@@ -27,10 +27,11 @@
 
 ![项目展示](https://img-blog.csdnimg.cn/f0b09cd868ae462d80807270b49210bb.png)
 
-
-**项目预览地址**
+### 1.1项目预览地址
 
 [https://www.daidaibg.com/bigscreen](https://www.daidaibg.com/bigscreen)
+
+### 1.2项目仓库地址
 
 **github地址**
 
@@ -42,7 +43,7 @@
 
 
 
-###  1.1滚动设置，自适应设置 
+###  1.3滚动设置，自适应设置 
 
 项目中可以进行滚动配置，内容是否滚动
 
@@ -149,10 +150,36 @@ this.$Message.warning(res.msg)
 {{10.23123|montionFilter }}
 ```
 
-##  五、交流反馈（面条的群）
+##  6、交流反馈（面条的群）
 
 QQ群号：713105837
 
 QQ群二维码：
 
 ![输入图片说明](https://gitee.com/MTrun/big-screen-vue-datav/raw/master/public/image.png)
+
+## 7、个人开源博客（有需求可以关注）
+
+### 7.1、预览地址
+
+搞bug
+
+[https://www.gaobug.com](https://gitee.com/link?target=https%3A%2F%2Fwww.gaobug.com)
+
+### 7.2 仓库地址
+
+##### gitee
+
+[https://gitee.com/memeda520/blog-cloud](https://gitee.com/memeda520/blog-cloud)
+
+##### github
+
+https://github.com/daidaibg/gaobug
+
+##### 博客交流群
+
+搞bug 反馈交流群
+
+464449906
+
+![](https://www.gaobug.com/img/qqcode/qqqun.png)
