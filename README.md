@@ -80,11 +80,13 @@
 ```npm
 npm install   
 ```
-### 移除node-sass 更换成sass 兼容node版本性高。
+### 
 
 
 
-### ~~node-sass 安装慢或失败问题  ~~
+### node-sass 安装慢或失败问题
+
+#### 移除node-sass 更换成sass 兼容node版本性高。  请拉取主分支最新版本。
 
 
 
