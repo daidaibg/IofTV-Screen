@@ -39,7 +39,7 @@
 
 **Gitee地址**
 
-[https://gitee.com/memeda520/IofTV-Screen](https://gitee.com/memeda520/IofTV-Screen)
+[https://gitee.com/daidaibg/IofTV-Screen](https://gitee.com/daidaibg/IofTV-Screen)
 
 
 
@@ -176,7 +176,7 @@ QQ群二维码：
 
 ##### gitee
 
-[https://gitee.com/memeda520/blog-cloud](https://gitee.com/memeda520/blog-cloud)
+[https://gitee.com/daidaibg/blog-cloud](https://gitee.com/daidaibg/blog-cloud)
 
 ##### github
 
