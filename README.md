@@ -80,11 +80,15 @@
 ```npm
 npm install   
 ```
-### node-sass 安装慢或失败问题  单独使用这个命令
-```
-npm i node-sass@4 --sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
-```
-### 启动
+### 移除node-sass 更换成sass 兼容node版本性高。
+
+
+
+### ~~node-sass 安装慢或失败问题  ~~
+
+
+
+启动
 
 ```npm
 npm start 
