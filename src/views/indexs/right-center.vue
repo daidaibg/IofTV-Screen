@@ -84,7 +84,7 @@ export default {
   height: 100%;
   overflow: hidden;
 
-  /deep/ .kong {
+  ::v-deep  .kong {
     width: auto;
   }
 }
