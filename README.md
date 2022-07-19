@@ -39,7 +39,7 @@
 
 **Gitee地址**
 
-[https://gitee.com/memeda520/IofTV-Screen](https://gitee.com/memeda520/IofTV-Screen)
+[https://gitee.com/daidaibg/IofTV-Screen](https://gitee.com/daidaibg/IofTV-Screen)
 
 
 
@@ -80,11 +80,17 @@
 ```npm
 npm install   
 ```
-### node-sass 安装慢或失败问题  单独使用这个命令
-```
-npm i node-sass@4 --sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
-```
-### 启动
+### 
+
+
+
+### node-sass 安装慢或失败问题
+
+#### 移除node-sass 更换成sass 兼容node版本性高。  请拉取主分支最新版本。
+
+
+
+启动
 
 ```npm
 npm start 
@@ -174,7 +180,7 @@ QQ群二维码：
 
 ##### gitee
 
-[https://gitee.com/memeda520/blog-cloud](https://gitee.com/memeda520/blog-cloud)
+[https://gitee.com/daidaibg/blog-cloud](https://gitee.com/daidaibg/blog-cloud)
 
 ##### github
 
