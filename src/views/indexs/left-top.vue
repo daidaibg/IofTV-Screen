@@ -2,7 +2,7 @@
  * @Author: daidai
  * @Date: 2022-02-28 16:16:42
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-04-28 09:50:07
+ * @LastEditTime: 2022-07-20 17:57:11
  * @FilePath: \web-pc\src\pages\big-screen\view\indexs\left-center.vue
 -->
 <template>
