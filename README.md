@@ -75,22 +75,12 @@
 
 ## 3、使用介绍
 
-### 安装
+### 3.1安装
 
 ```npm
 npm install   
 ```
-### 
-
-
-
-### node-sass 安装慢或失败问题
-
-#### 移除node-sass 更换成sass 兼容node版本性高。  请拉取主分支最新版本。
-
-
-
-启动
+### 3.2启动
 
 ```npm
 npm start 
@@ -99,6 +89,14 @@ npm start
 [接下来跟面条的差不多还是看面条的文档吧](https://gitee.com/MTrun/big-screen-vue-datav/tree/master#%E4%B8%89%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D)
 
 https://gitee.com/MTrun/big-screen-vue-datav/tree/master#%E4%B8%89%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D
+
+### 3.3 取消mock模拟数据
+
+```javascript
+// src\main.js文件
+把下面这句话注释掉就可以了。
+require('./mock/mock')//是否使用mock
+```
 
 
 
