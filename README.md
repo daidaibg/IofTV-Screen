@@ -2,6 +2,8 @@
 
 ## 1、项目描述
 
+
+
 根据奔跑吧面条的**[vue-big-screen](https://gitee.com/MTrun/big-screen-vue-datav)**开源框架基础上进行修改。
 
 - 项目需要全屏展示（按 F11）。
@@ -58,6 +60,8 @@
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/564c304c4b2249b1a525558eeb986497.png)
 
+
+
 ##  2、主要文件介绍
 
 | 文件              | 作用/功能                                                    |
@@ -72,6 +76,8 @@
 | common/...        | 全局封装的 ECharts 和 flexible 插件代码（适配屏幕尺寸，可定制化修改） |
 | api/api.js        | 接口封装文件                                                 |
 | mock              | 模拟数据接口地址                                             |
+
+### 2.1、 1.1.0版本开始采用自适应组件方式，不再使用mixin方式。
 
 ## 3、使用介绍
 
@@ -98,13 +104,58 @@ https://gitee.com/MTrun/big-screen-vue-datav/tree/master#%E4%B8%89%E4%BD%BF%E7%9
 require('./mock/mock')//是否使用mock
 ```
 
+## 4、自适应缩放组件
+
+### 注意
+
+采用Scale方式，会自动给组件父元素添加overflow:hidden 
+
+### 使用
+
+```vue
+<template>
+  <scale-screen width="1920" height="1080">
+    <div>
+      <v-chart>....</v-chart>
+      <v-chart>....</v-chart>
+      <v-chart>....</v-chart>
+      <v-chart>....</v-chart>
+      <v-chart>....</v-chart>
+    </div>
+  </scale-screen>
+</template>
+
+<script>
+import ScaleScreen from 'scale-screen'
+
+export default {
+  name:'Demo',
+  components:{
+    VScaleScreen
+  }
+}
+</script>
+```
 
 
-## 4、公用组件
+
+### API
+| 属性         | 说明                                                         | 类型                             | 默认值 |
+| ------------ | ------------------------------------------------------------ | -------------------------------- | ------ |
+| selfAdaption | 是否进行自适应                                               | Boolean                          | true   |
+| width        | 大屏宽度                                                     | `Number` or `String`             | 1920   |
+| height       | 大屏高度                                                     | `Number` or `String`             | 1080   |
+| autoScale    | 自适应配置，配置为boolean类型时，为启动或者关闭自适应，配置为对象时，若x为true，x轴产生边距，y为true时，y轴产生边距，启用fullScreen时此配置失效 | Boolean or {x:boolean,y:boolean} | true   |
+| delay        | 窗口变化防抖延迟时间                                         | Number                           | 500    |
+| fullScreen   | 全屏自适应，启用此配置项时会存在拉伸效果，同时autoScale失效，非必要情况下不建议开启 | Boolean                          | false  |
+| boxStyle     | 修改容器样式，如居中展示时侧边背景色，符合Vue双向绑定style标准格式 | Object                           | null   |
+| wrapperStyle | 修改自适应区域样式，符合Vue双向绑定style标准格式             | Object                           | null   |
+
+## 5、公用组件
 
 封装了除面条外个别用到的组件
 
-### 4.1 message消息提示
+### 5.1 message消息提示
 
 因为刚开始没想着用第三方提示库，自己简单封装了一个。
 
@@ -126,7 +177,7 @@ this.$Message.warning(res.msg)
 | text | 提示文字 |    -    | string |    -    |
 | type | 弹窗类型 | warning | string | warning |
 
-### 4.2 外边框
+### 5.2 外边框
 
 因为我的项目外边框几乎一样，还有title,所以封装了此组件。
 
@@ -144,9 +195,9 @@ this.$Message.warning(res.msg)
 | :---: | :--: | :----: | :----: | :----: |
 | title | 标头 |   -    | string |   -    |
 
-## 5、全局参数
+## 6、全局参数
 
-### 5.1filter
+### 6.1filter
 
 监测数据项统一过滤，保留两位小数。
 
@@ -154,7 +205,7 @@ this.$Message.warning(res.msg)
 {{10.23123|montionFilter }}
 ```
 
-##  6、大屏交流反馈（面条的群）
+##  7、大屏交流反馈（面条的群）
 
 ### 大屏QQ群
 
@@ -166,28 +217,3 @@ QQ群二维码：
 
 ![输入图片说明](https://gitee.com/MTrun/big-screen-vue-datav/raw/master/public/image.png)
 
-## 7、个人开源博客（有需求可以关注）
-
-### 7.1、预览地址
-
-搞bug
-
-[https://www.gaobug.com](https://gitee.com/link?target=https%3A%2F%2Fwww.gaobug.com)
-
-### 7.2 仓库地址
-
-##### gitee
-
-[https://gitee.com/daidaibg/blog-cloud](https://gitee.com/daidaibg/blog-cloud)
-
-##### github
-
-https://github.com/daidaibg/gaobug
-
-##### 博客交流群
-
-搞bug 反馈交流群
-
-464449906
-
-![](https://www.gaobug.com/img/qqcode/qqqun.png)

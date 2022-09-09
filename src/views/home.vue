@@ -2,11 +2,17 @@
  * @Author: daidai
  * @Date: 2022-01-12 14:23:32
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-04-28 14:22:06
+ * @LastEditTime: 2022-09-09 14:47:24
  * @FilePath: \web-pc\src\pages\big-screen\view\home.vue
 -->
 <template>
-  <div id="index" ref="appRef" class="index_home" :class="{ pageisScale: isScale }">
+  <!-- <div id="index" ref="appRef" class="index_home" :class="{ pageisScale: isScale }"> -->
+  <ScaleScreen
+    :width="1920"
+    :height="1080"
+    class="scale-wrap"
+    :selfAdaption="$store.state.setting.isScale"
+  >
     <div class="bg">
       <dv-loading v-if="loading">Loading...</dv-loading>
       <div v-else class="host-body">
@@ -20,10 +26,13 @@
               <span class="title-text">互联网设备可视化平台</span>
             </div>
           </div>
-          <div class="timers ">
-
+          <div class="timers">
             {{ dateYear }} {{ dateWeek }} {{ dateDay }}
-            <i class=" blq-icon-shezhi02" style="margin-left:10px" @click="showSetting"></i>
+            <i
+              class="blq-icon-shezhi02"
+              style="margin-left: 10px"
+              @click="showSetting"
+            ></i>
           </div>
         </div>
         <!-- 头部 e-->
@@ -32,17 +41,17 @@
         <!-- 内容 e -->
       </div>
     </div>
-    <Setting ref="setting"/>
-  </div>
+    <Setting ref="setting" />
+  </ScaleScreen>
+  <!-- </div> -->
 </template>
 
 <script>
-import drawMixin from "../utils/drawMixin";
 import { formatTime } from "../utils/index.js";
-import Setting from './setting.vue'
+import Setting from "./setting.vue";
+import ScaleScreen from "@/components/scale-screen/scale-screen.vue";
 export default {
-  mixins: [drawMixin],
-  components:{Setting},
+  components: { Setting, ScaleScreen },
   data() {
     return {
       timing: null,
@@ -51,9 +60,6 @@ export default {
       dateYear: null,
       dateWeek: null,
       weekday: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
-
-
-
     };
   },
   filters: {
@@ -61,12 +67,8 @@ export default {
       return msg || 0;
     },
   },
-  computed:{
-    
-  },
-  created(){
-   
-  },
+  computed: {},
+  created() {},
   mounted() {
     this.timeFn();
     this.cancelLoading();
@@ -75,8 +77,8 @@ export default {
     clearInterval(this.timing);
   },
   methods: {
-    showSetting(){
-        this.$refs.setting.init()
+    showSetting() {
+      this.$refs.setting.init();
     },
     timeFn() {
       this.timing = setInterval(() => {
@@ -86,8 +88,9 @@ export default {
       }, 1000);
     },
     cancelLoading() {
-      setTimeout(() => {
+      let timer = setTimeout(() => {
         this.loading = false;
+        clearTimeout(timer);
       }, 500);
     },
   },
