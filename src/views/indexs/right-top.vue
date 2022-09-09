@@ -2,7 +2,7 @@
  * @Author: daidai
  * @Date: 2022-03-01 14:13:04
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-07 11:17:49
+ * @LastEditTime: 2022-09-09 11:40:31
  * @FilePath: \web-pc\src\pages\big-screen\view\indexs\right-top.vue
 -->
 <template>
@@ -30,10 +30,12 @@ export default {
     };
   },
   created() {
-    this.getData();
+   
   },
 
-  mounted() {},
+  mounted() {
+     this.getData();
+  },
   beforeDestroy() {
     this.clearData();
   },
