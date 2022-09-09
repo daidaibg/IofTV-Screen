@@ -76,7 +76,7 @@ export default {
         radiochange(val, type) {
             this.$store.commit('setting/updateSwiper', { val, type })
             if(type==='isScale'){
-                this.$router.go(0)
+                // this.$router.go(0)
                 // location.reload()
                 // window.location.href=window.location.href+"?t="+Date.now()
             }

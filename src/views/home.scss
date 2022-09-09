@@ -1,18 +1,15 @@
-#index {
+.scale-wrap {
     color: #d3d6dd;
     width: 1920px;
     height: 1080px;
     overflow: hidden;
-
-    &.pageisScale {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        transform-origin: left top;
-    }
-
-
+    // &.pageisScale {
+    //     position: absolute;
+    //     top: 50%;
+    //     left: 50%;
+    //     transform: translate(-50%, -50%);
+    //     transform-origin: left top;
+    // }
     .bg {
         width: 100%;
         height: 100%;
@@ -100,7 +97,7 @@
 
 }
 
-.index_home {
+.scale-wrap {
     .pagetab {
         position: absolute;
         top: -35px;
