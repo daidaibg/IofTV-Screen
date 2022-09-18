@@ -197,7 +197,7 @@ this.$Message.warning(res.msg)
 
 ## 全局参数
 
-### 1filter
+### filter
 
 监测数据项统一过滤，保留两位小数。
 
