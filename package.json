@@ -12,22 +12,22 @@
   "dependencies": {
     "@jiaminghi/data-view": "^2.10.0",
     "axios": "^0.24.0",
-    "element-ui": "^2.15.6",
+    "element-ui": "^2.15.10",
     "sass": "^1.53.0",
-    "vue": "^2.6.11",
-    "vue-easytable": "^2.14.0",
-    "vue-router": "^3.2.0",
+    "vue": "^2.7.10",
+    "vue-easytable": "^2.20.1",
+    "vue-router": "^3.6.5",
     "vue-seamless-scroll": "^1.1.23",
     "vuex": "^3.4.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-router": "~4.5.0",
-    "@vue/cli-plugin-vuex": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
+    "@vue/cli-plugin-router": "^4.5.19",
+    "@vue/cli-plugin-vuex": "^4.5.19",
+    "@vue/cli-service": "^4.5.19",
     "babel-plugin-component": "^1.1.1",
     "mockjs": "^1.1.0",
     "sass-loader": "^8.0.2",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.7.10"
   },
   "browserslist": [
     "> 1%",
