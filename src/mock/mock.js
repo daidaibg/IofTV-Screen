@@ -96,7 +96,7 @@ function centermap(options) {
                         value: '@integer(1, 1000)'
                     }
                 ],
-                regionCode: -1,//-代表中国
+                regionCode: 'china',
             }
         })
         return a
