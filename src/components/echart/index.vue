@@ -2,7 +2,7 @@
  * @Author: daidai
  * @Date: 2022-02-28 16:29:08
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-04-25 15:45:57
+ * @LastEditTime: 2022-09-27 15:05:45
  * @FilePath: \web-pc\src\pages\big-screen\components\echart\index.vue
 -->
 <template>
@@ -10,8 +10,7 @@
 </template>
 
 <script>
-import tdTheme from './theme.json' // 引入默认主题
-
+import * as echarts from 'echarts';
 export default {
   name: 'echart',
   props: {
@@ -51,7 +50,6 @@ export default {
     }
   },
   mounted () {
-    // echarts.registerTheme('tdTheme', tdTheme); // 覆盖默认主题
     this.initChart();
   },
   beforeDestroy () {
@@ -61,7 +59,7 @@ export default {
   methods: {
     initChart () {
       // 初始化echart
-      this.chart = echarts.init(this.$el, 'tdTheme')
+      this.chart = echarts.init(this.$el)
       this.chart.setOption(this.options, true)
     }
   }

@@ -12,6 +12,7 @@
   "dependencies": {
     "@jiaminghi/data-view": "^2.10.0",
     "axios": "^0.24.0",
+    "echarts": "^5.4.0",
     "element-ui": "^2.15.10",
     "sass": "^1.53.0",
     "vue": "^2.7.10",
