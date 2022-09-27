@@ -2,7 +2,7 @@
  * @Author: daidai
  * @Date: 2022-03-01 11:17:39
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-07 10:59:56
+ * @LastEditTime: 2022-09-27 15:14:43
  * @FilePath: \web-pc\src\pages\big-screen\view\indexs\center-map.vue
 -->
 <template>
@@ -13,12 +13,16 @@
       <div class="you"></div>
     </div>
     <div class="mapwrap">
-       <dv-border-box-13 >
-      <div class="quanguo" @click="getData(-1)" v-if="code !== 'china' && userCode == -1">
-        中国
-      </div>
+      <dv-border-box-13>
+        <div
+          class="quanguo"
+          @click="getData(-1)"
+          v-if="code !== 'china' && userCode == -1"
+        >
+          中国
+        </div>
 
-      <Echart id="CenterMap" :options="options" ref="CenterMap" />
+        <Echart id="CenterMap" :options="options" ref="CenterMap" />
       </dv-border-box-13>
     </div>
   </div>
@@ -26,47 +30,43 @@
 
 <script>
 import xzqCode from "../../utils/map/xzqCode";
-import { currentGET } from 'api/modules'
-
-import { GETNOBASE } from 'api'
+import { currentGET } from "api/modules";
+import * as echarts from "echarts";
+import { GETNOBASE } from "api";
 export default {
   data() {
     return {
       maptitle: "设备分布图",
       options: {},
       code: "china",
-      userCode: -1,//-1 代表中国 用户权限的行政区code
-      echartBindClick: false
+      userCode: -1, //-1 代表中国 用户权限的行政区code
+      echartBindClick: false,
     };
   },
-  created() { },
+  created() {},
 
   mounted() {
     // console.log(xzqCode);
-    this.getData()
-
-
+    this.getData();
   },
   methods: {
     getData(code) {
-      currentGET('big8',{regionCode:code}).then(res => {
-        console.log('设备分布', res);
+      currentGET("big8", { regionCode: code }).then((res) => {
+        console.log("设备分布", res);
         if (res.success) {
           if (!code) {
             this.userCode = res.data.regionCode;
           }
           this.getGeojson(res.data.regionCode, res.data.dataList);
           this.mapclick();
-
         } else {
-          this.$Message.warning(res.msg)
+          this.$Message.warning(res.msg);
         }
-      })
+      });
     },
     getGeojson(name, mydata) {
-
       if (name == -1) {
-        name = 'china'
+        name = "china";
       }
       this.code = name;
       GETNOBASE("./map-geojson/" + name + ".json").then((res) => {
@@ -118,6 +118,7 @@ export default {
       }
     },
     init(name, data, data2) {
+      console.log(data2);
       let top = 45;
       let zoom = 1.05;
       if (name == "china") {
@@ -166,29 +167,16 @@ export default {
           zoom: zoom,
           top: top,
           aspectScale: 0.78,
-          tooltip: {
-            show: false,
-          },
-          label: {
-            show: false,
-          }, //地图中文字内容及样式控制
-          itemStyle: {
-            areaColor: "rgba(0,0,0,0)",
-            borderColor: "rgba(0,0,0,0)",
-          },
-          emphasis: {
-            disabled: true,
-          },
+          show: false,
         },
         series: [
           {
             name: "MAP",
             type: "map",
-            mapType: name,
+            map: name,
             aspectScale: 0.78,
             data: data,
             // data: [1,100],
-
             selectedMode: false, //是否允许选中多个区域
             zoom: zoom,
             geoIndex: 1,
@@ -221,7 +209,15 @@ export default {
                 }
               },
               rich: {},
-              emphasis: { show: false },
+            },
+            emphasis: {
+              label:{
+                show:false
+              },
+              itemStyle: {
+                areaColor: "#389BB7",
+                borderWidth: 1,
+              },
             },
             itemStyle: {
               borderColor: "rgba(147, 235, 248, .8)",
@@ -247,10 +243,6 @@ export default {
               shadowOffsetX: -2,
               shadowOffsetY: 2,
               shadowBlur: 10,
-              emphasis: {
-                areaColor: "#389BB7",
-                borderWidth: 1,
-              },
             },
           },
           {
@@ -315,11 +307,11 @@ export default {
     message(text) {
       this.$Message({
         text: text,
-        type: 'warning'
-      })
+        type: "warning",
+      });
     },
     mapclick() {
-      if (this.echartBindClick || this.userCode !== -1) return
+      if (this.echartBindClick || this.userCode !== -1) return;
       //单击切换到级地图，当mapCode有值,说明可以切换到下级地图
       this.$refs.CenterMap.chart.on("click", (params) => {
         // console.log(params);
@@ -330,12 +322,12 @@ export default {
           this.message("暂无下级地市!");
         }
       });
-      this.echartBindClick = true
+      this.echartBindClick = true;
     },
   },
 };
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .centermap {
   margin-bottom: 30px;
 
@@ -350,10 +342,12 @@ export default {
       font-size: 28px;
       font-weight: 900;
       letter-spacing: 6px;
-      background: linear-gradient(92deg,
-          #0072ff 0%,
-          #00eaff 48.8525390625%,
-          #01aaff 100%);
+      background: linear-gradient(
+        92deg,
+        #0072ff 0%,
+        #00eaff 48.8525390625%,
+        #01aaff 100%
+      );
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin: 0 10px;
@@ -377,7 +371,6 @@ export default {
   }
 
   .mapwrap {
-   
     height: 548px;
     width: 100%;
     // padding: 0 0 10px 0;
