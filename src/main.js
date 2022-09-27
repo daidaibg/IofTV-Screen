@@ -2,7 +2,7 @@
  * @Author: daidai
  * @Date: 2022-01-12 14:05:56
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-07 11:03:31
+ * @LastEditTime: 2022-09-27 14:55:57
  * @FilePath: \web-pc\src\pages\big-screen\main.js
  */
 import Vue from "vue";
@@ -19,6 +19,7 @@ import Messages from './components/message/message'
 import "vue-easytable/libs/theme-default/index.css";
 import  '@/assets/css/public.scss'
 import "@/assets/css/index.scss"
+
 
 import * as filters from '@/directives/filters'
 

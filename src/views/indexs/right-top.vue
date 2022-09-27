@@ -2,7 +2,7 @@
  * @Author: daidai
  * @Date: 2022-03-01 14:13:04
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-09 11:40:31
+ * @LastEditTime: 2022-09-27 15:04:49
  * @FilePath: \web-pc\src\pages\big-screen\view\indexs\right-top.vue
 -->
 <template>
@@ -20,7 +20,7 @@
 
 <script>
 import { currentGET } from "api/modules";
-
+import {graphic} from "echarts"
 export default {
   data() {
     return {
@@ -159,9 +159,8 @@ export default {
             name: "报警1次数",
             color: "rgba(252,144,16,.7)",
             areaStyle: {
-              normal: {
                 //右，下，左，上
-                color: new echarts.graphic.LinearGradient(
+                color: new graphic.LinearGradient(
                   0,
                   0,
                   0,
@@ -178,7 +177,6 @@ export default {
                   ],
                   false
                 ),
-              },
             },
             markPoint: {
               data: [
@@ -228,9 +226,8 @@ export default {
             name: "报警2次数",
             color: "rgba(9,202,243,.7)",
             areaStyle: {
-              normal: {
                 //右，下，左，上
-                color: new echarts.graphic.LinearGradient(
+                color: new graphic.LinearGradient(
                   0,
                   0,
                   0,
@@ -247,7 +244,6 @@ export default {
                   ],
                   false
                 ),
-              },
             },
             markPoint: {
               data: [
