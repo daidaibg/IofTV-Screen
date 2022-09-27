@@ -2,7 +2,7 @@
  * @Author: daidai
  * @Date: 2022-03-01 11:17:39
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-27 15:20:03
+ * @LastEditTime: 2022-09-27 15:21:14
  * @FilePath: \web-pc\src\pages\big-screen\view\indexs\center-map.vue
 -->
 <template>
@@ -16,8 +16,8 @@
       <dv-border-box-13>
         <div
           class="quanguo"
-          @click="getData(-1)"
-          v-if="code !== 'china' && userCode == -1"
+          @click="getData('china')"
+          v-if="code !== 'china'"
         >
           中国
         </div>
