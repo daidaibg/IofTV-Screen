@@ -2,7 +2,7 @@
  * @Author: daidai
  * @Date: 2022-03-01 11:17:39
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-27 15:21:14
+ * @LastEditTime: 2022-09-27 15:23:52
  * @FilePath: \web-pc\src\pages\big-screen\view\indexs\center-map.vue
 -->
 <template>
@@ -46,7 +46,7 @@ export default {
 
   mounted() {
     // console.log(xzqCode);
-    this.getData();
+    this.getData("china");
   },
   methods: {
     getData(code) {
