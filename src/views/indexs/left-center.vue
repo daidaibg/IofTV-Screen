@@ -2,7 +2,7 @@
  * @Author: daidai
  * @Date: 2022-02-28 16:16:42
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-04-28 09:46:18
+ * @LastEditTime: 2022-09-27 15:16:12
  * @FilePath: \web-pc\src\pages\big-screen\view\indexs\left-center.vue
 -->
 <template>
@@ -196,17 +196,18 @@ export default {
               length: 20, // 第一段线 长度
               length2: 36, // 第二段线 长度
               show: true,
+            
+            },
               emphasis: {
                 show: true,
               },
-            },
           },
           {
             ...piedata,
             tooltip: { show: true },
             itemStyle: {},
             label: {
-              backgroundColor: "auto", //圆点颜色，auto：映射的系列色
+              backgroundColor: "inherit", //圆点颜色，auto：映射的系列色
               height: 0,
               width: 0,
               lineHeight: 0,
