@@ -2,7 +2,7 @@
  * @Author: daidai
  * @Date: 2022-03-01 11:17:39
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-27 15:14:43
+ * @LastEditTime: 2022-09-27 15:20:03
  * @FilePath: \web-pc\src\pages\big-screen\view\indexs\center-map.vue
 -->
 <template>
@@ -38,9 +38,8 @@ export default {
     return {
       maptitle: "设备分布图",
       options: {},
-      code: "china",
-      userCode: -1, //-1 代表中国 用户权限的行政区code
-      echartBindClick: false,
+      code: "china",//china 代表中国 其他地市是行政编码
+      echartBindClick: false
     };
   },
   created() {},
@@ -54,9 +53,6 @@ export default {
       currentGET("big8", { regionCode: code }).then((res) => {
         console.log("设备分布", res);
         if (res.success) {
-          if (!code) {
-            this.userCode = res.data.regionCode;
-          }
           this.getGeojson(res.data.regionCode, res.data.dataList);
           this.mapclick();
         } else {
@@ -64,15 +60,19 @@ export default {
         }
       });
     },
+    /**
+     * @description: 获取geojson
+     * @param {*} name china 表示中国 其他省份行政区编码
+     * @param {*} mydata 接口返回列表数据
+     * @return {*}
+     */    
     getGeojson(name, mydata) {
-      if (name == -1) {
-        name = "china";
-      }
       this.code = name;
       GETNOBASE("./map-geojson/" + name + ".json").then((res) => {
         // console.log('地图行政区划', name, res);
         let cityCenter = {};
         let arr = res.features;
+        //根据geojson获取省份中心点
         arr.map((item) => {
           cityCenter[item.properties.name] =
             item.properties.centroid || item.properties.center;
@@ -311,7 +311,7 @@ export default {
       });
     },
     mapclick() {
-      if (this.echartBindClick || this.userCode !== -1) return;
+      if (this.echartBindClick ) return
       //单击切换到级地图，当mapCode有值,说明可以切换到下级地图
       this.$refs.CenterMap.chart.on("click", (params) => {
         // console.log(params);

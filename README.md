@@ -1,6 +1,6 @@
 
 
-## 1、项目描述
+## 项目描述
 
 
 
@@ -29,11 +29,11 @@
 
 ![项目展示](https://img-blog.csdnimg.cn/f0b09cd868ae462d80807270b49210bb.png)
 
-### 1.1项目预览地址
+### 项目预览地址
 
 [https://www.daidaibg.com/bigscreen](https://www.daidaibg.com/bigscreen)
 
-### 1.2项目仓库地址
+### 项目仓库地址
 
 **github地址**
 
@@ -43,9 +43,9 @@
 
 [https://gitee.com/daidaibg/IofTV-Screen](https://gitee.com/daidaibg/IofTV-Screen)
 
+### 1.1.0版本开始采用自适应组件方式，不再使用mixin方式。
 
-
-###  1.3滚动设置，自适应设置 
+###  滚动设置，自适应设置 
 
 项目中可以进行滚动配置，内容是否滚动
 
@@ -77,16 +77,16 @@
 | api/api.js        | 接口封装文件                                                 |
 | mock              | 模拟数据接口地址                                             |
 
-### 2.1、 1.1.0版本开始采用自适应组件方式，不再使用mixin方式。
+###  
 
-## 3、使用介绍
+## 使用介绍
 
-### 3.1安装
+### 安装
 
 ```npm
 npm install   
 ```
-### 3.2启动
+### 启动
 
 ```npm
 npm start 
@@ -96,7 +96,7 @@ npm start
 
 https://gitee.com/MTrun/big-screen-vue-datav/tree/master#%E4%B8%89%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D
 
-### 3.3 取消mock模拟数据
+### 取消mock模拟数据
 
 ```javascript
 // src\main.js文件
@@ -104,7 +104,7 @@ https://gitee.com/MTrun/big-screen-vue-datav/tree/master#%E4%B8%89%E4%BD%BF%E7%9
 require('./mock/mock')//是否使用mock
 ```
 
-## 4、自适应缩放组件
+## 自适应缩放组件
 
 ### 注意
 
@@ -151,7 +151,7 @@ export default {
 | boxStyle     | 修改容器样式，如居中展示时侧边背景色，符合Vue双向绑定style标准格式 | Object                           | null   |
 | wrapperStyle | 修改自适应区域样式，符合Vue双向绑定style标准格式             | Object                           | null   |
 
-## 5、公用组件
+## 公用组件
 
 封装了除面条外个别用到的组件
 
@@ -195,9 +195,9 @@ this.$Message.warning(res.msg)
 | :---: | :--: | :----: | :----: | :----: |
 | title | 标头 |   -    | string |   -    |
 
-## 6、全局参数
+## 全局参数
 
-### 6.1filter
+### filter
 
 监测数据项统一过滤，保留两位小数。
 
@@ -205,7 +205,7 @@ this.$Message.warning(res.msg)
 {{10.23123|montionFilter }}
 ```
 
-##  7、大屏交流反馈（面条的群）
+##  大屏交流反馈（面条的群）
 
 ### 大屏QQ群
 
