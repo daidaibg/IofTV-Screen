@@ -2,7 +2,7 @@
  * @Author: daidai
  * @Date: 2022-03-01 11:17:39
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-29 15:47:10
+ * @LastEditTime: 2022-09-29 15:50:18
  * @FilePath: \web-pc\src\pages\big-screen\view\indexs\center-map.vue
 -->
 <template>
@@ -76,7 +76,6 @@ export default {
         mapjson = mapjson.geoJSON;
       } else {
         mapjson = await GETNOBASE(`./map-geojson/${geoname}.json`).then((res) => {
-          console.log(res);
           return res;
         });
         echarts.registerMap(name, mapjson);
