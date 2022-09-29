@@ -2,7 +2,7 @@
  * @Author: daidai
  * @Date: 2022-03-01 11:17:39
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-27 15:23:52
+ * @LastEditTime: 2022-09-29 15:50:18
  * @FilePath: \web-pc\src\pages\big-screen\view\indexs\center-map.vue
 -->
 <template>
@@ -14,11 +14,7 @@
     </div>
     <div class="mapwrap">
       <dv-border-box-13>
-        <div
-          class="quanguo"
-          @click="getData('china')"
-          v-if="code !== 'china'"
-        >
+        <div class="quanguo" @click="getData('china')" v-if="code !== 'china'">
           中国
         </div>
 
@@ -38,8 +34,9 @@ export default {
     return {
       maptitle: "设备分布图",
       options: {},
-      code: "china",//china 代表中国 其他地市是行政编码
-      echartBindClick: false
+      code: "china", //china 代表中国 其他地市是行政编码
+      echartBindClick: false,
+      isSouthChinaSea: false, //是否要展示南海群岛  修改此值请刷新页面
     };
   },
   created() {},
@@ -65,67 +62,46 @@ export default {
      * @param {*} name china 表示中国 其他省份行政区编码
      * @param {*} mydata 接口返回列表数据
      * @return {*}
-     */    
-    getGeojson(name, mydata) {
+     */
+    async getGeojson(name, mydata) {
       this.code = name;
-      GETNOBASE("./map-geojson/" + name + ".json").then((res) => {
-        // console.log('地图行政区划', name, res);
-        let cityCenter = {};
-        let arr = res.features;
-        //根据geojson获取省份中心点
-        arr.map((item) => {
-          cityCenter[item.properties.name] =
-            item.properties.centroid || item.properties.center;
-        });
-        let newData = [];
-        // console.log('中心点',cityCenter);
-        mydata.map((item) => {
-          if (cityCenter[item.name]) {
-            let color = this.getColor(item.value);
-            newData.push({
-              name: item.name,
-              value: cityCenter[item.name].concat(item.value),
-              // itemStyle: {
-              //   color: color,
-              //   borderColor: color,
-              //   // borderWidth: 4,
-              // },
-            });
-          }
-        });
-        let mapjson = echarts.getMap(name);
-        if (!mapjson) {
-          echarts.registerMap(name, res);
-        }
-        this.init(name, mydata, newData);
-      });
-    },
-    getColor(num) {
-      if (num > 0 && num < 9) {
-        return "#035cf5";
-      } else if (num > 10 && num < 49) {
-        return "#3375e4";
-      } else if (num > 50 && num < 199) {
-        return "#6797ef";
-      } else if (num > 200 && num < 499) {
-        return "#96b5ef";
-      } else if (num > 500 && num < 9999) {
-        return "#bacae8";
-      } else if (num > 1000) {
-        return "#3FF4FF";
-      } else {
-        return "";
+      //如果要展示南海群岛并且展示的是中国的话
+      let geoname=name
+      if (this.isSouthChinaSea && name == "china") {
+        geoname = "chinaNanhai";
       }
+      //如果有注册地图的话就不用再注册 了
+      let mapjson = echarts.getMap(name);
+      if (mapjson) {
+        mapjson = mapjson.geoJSON;
+      } else {
+        mapjson = await GETNOBASE(`./map-geojson/${geoname}.json`).then((res) => {
+          return res;
+        });
+        echarts.registerMap(name, mapjson);
+      }
+      let cityCenter = {};
+      let arr = mapjson.features;
+      //根据geojson获取省份中心点
+      arr.map((item) => {
+        cityCenter[item.properties.name] =
+          item.properties.centroid || item.properties.center;
+      });
+      let newData = [];
+      mydata.map((item) => {
+        if (cityCenter[item.name]) {
+          newData.push({
+            name: item.name,
+            value: cityCenter[item.name].concat(item.value),
+          });
+        }
+      });
+      this.init(name, mydata, newData);
     },
     init(name, data, data2) {
-      console.log(data2);
+      // console.log(data2);
       let top = 45;
       let zoom = 1.05;
-      if (name == "china") {
-        top = 140;
-        zoom = 1.42;
-      }
-
       let option = {
         backgroundColor: "rgba(0,0,0,0)",
         tooltip: {
@@ -166,7 +142,7 @@ export default {
           selectedMode: false, //是否允许选中多个区域
           zoom: zoom,
           top: top,
-          aspectScale: 0.78,
+          // aspectScale: 0.78,
           show: false,
         },
         series: [
@@ -174,7 +150,7 @@ export default {
             name: "MAP",
             type: "map",
             map: name,
-            aspectScale: 0.78,
+            // aspectScale: 0.78,
             data: data,
             // data: [1,100],
             selectedMode: false, //是否允许选中多个区域
@@ -211,8 +187,8 @@ export default {
               rich: {},
             },
             emphasis: {
-              label:{
-                show:false
+              label: {
+                show: false,
               },
               itemStyle: {
                 areaColor: "#389BB7",
@@ -301,6 +277,10 @@ export default {
             },
           },
         ],
+         //动画效果
+            // animationDuration: 1000,
+            // animationEasing: 'linear',
+            // animationDurationUpdate: 1000
       };
       this.options = option;
     },
@@ -311,7 +291,7 @@ export default {
       });
     },
     mapclick() {
-      if (this.echartBindClick ) return
+      if (this.echartBindClick) return;
       //单击切换到级地图，当mapCode有值,说明可以切换到下级地图
       this.$refs.CenterMap.chart.on("click", (params) => {
         // console.log(params);

@@ -2,7 +2,7 @@
  * @Author: daidai
  * @Date: 2022-03-01 09:16:22
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-07 11:06:23
+ * @LastEditTime: 2022-09-29 15:12:34
  * @FilePath: \web-pc\src\pages\big-screen\components\item-wrap\item-wrap.vue
 -->
 <template>
@@ -44,7 +44,7 @@ $item_title_content-height: calc(100% - 38px);
 .lr_titles {
   box-sizing: border-box;
 
-  ::v-deep .border-box-content {
+:deep(.border-box-content)  {
     box-sizing: border-box;
     padding: 6px 16px 0px;
   }
