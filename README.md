@@ -192,6 +192,18 @@ this.$Message.warning(res.msg)
 | :---: | :--: | :----: | :----: | :----: |
 | title | 标头 |   -    | string |   -    |
 
+## 中间地图
+
+### 南海显隐控制
+
+ 根据需求来，**修改此值请刷新页面**
+
+```indexs/center-map.vue``` 文件中```isSouthChinaSea```变量 默认不显示南海(false),为```true```的时候显示南海
+
+```
+isSouthChinaSea:false,//默认不显示南海，改为true可显示南海
+```
+
 ## 全局参数
 
 ### filter
@@ -213,5 +225,4 @@ QQ群号：713105837
 QQ群二维码：
 
 ![输入图片说明](https://gitee.com/MTrun/big-screen-vue-datav/raw/master/public/image.png)
-
 
