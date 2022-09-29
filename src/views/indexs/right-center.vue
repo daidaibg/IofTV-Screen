@@ -2,7 +2,7 @@
  * @Author: daidai
  * @Date: 2022-03-01 15:51:43
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-04-28 15:24:27
+ * @LastEditTime: 2022-09-29 15:12:46
  * @FilePath: \web-pc\src\pages\big-screen\view\indexs\right-bottom.vue
 -->
 <template>
@@ -83,8 +83,7 @@ export default {
 .list_Wrap {
   height: 100%;
   overflow: hidden;
-
-  ::v-deep  .kong {
+  :deep(.kong)   {
     width: auto;
   }
 }
