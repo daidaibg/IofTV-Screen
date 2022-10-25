@@ -2,7 +2,7 @@
  * @Author: daidai
  * @Date: 2022-02-28 16:16:42
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-27 15:16:12
+ * @LastEditTime: 2022-10-25 09:18:22
  * @FilePath: \web-pc\src\pages\big-screen\view\indexs\left-center.vue
 -->
 <template>
@@ -57,7 +57,6 @@ export default {
           this.countUserNumData = res.data
           this.$nextTick(() => {
             this.init()
-            this.switper()
           })
 
         } else {
