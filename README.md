@@ -43,7 +43,7 @@
 
 [https://gitee.com/daidaibg/IofTV-Screen](https://gitee.com/daidaibg/IofTV-Screen)
 
-### vue+vite版本地址
+### vue3+vite版本地址
 
 **github地址**
 
