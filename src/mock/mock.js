@@ -72,7 +72,7 @@ Mock.mock(new RegExp('sbtx'), 'get', sbtx)
 
 function centermap(options) {
     let params = parameteUrl(options.url)
-    if (params.regionCode && params.regionCode != -1) {
+    if (params.regionCode && params.regionCode != 'china') {
         const a = Mock.mock({
             success: true,
             data: {
