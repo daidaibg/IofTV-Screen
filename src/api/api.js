@@ -1,7 +1,7 @@
 
 /*
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-04-28 10:25:38
+ * @LastEditTime: 2023-08-02 14:58:23
  */
 import axios from 'axios';
 import UtilVar from "@/config/UtilVar";
@@ -39,7 +39,7 @@ axios.interceptors.response.use(response => {
     }
     return response.data
 }, error => {
-    // console.log('axiosError',error);
+    console.error(error);
     let err = {
         success: false,
         msg: "未知异常，请联系管理员！"
