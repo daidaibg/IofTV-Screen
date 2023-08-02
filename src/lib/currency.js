@@ -43,9 +43,6 @@ export function getUUID() {
  */
 export function isAuth(key) {
   // console.log("key",key,sessionStorage.getItem('permissions'))
-  // if(process.env.VUE_APP_CONFIG=="dev"){
-  //   return true
-  // }
   return JSON.parse(sessionStorage.getItem('permissions') || '[]').indexOf(key) !== -1 || false
 }
 export const rowClassName = ({ row, rowIndex }) => {
