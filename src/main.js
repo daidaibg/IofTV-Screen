@@ -2,7 +2,7 @@
  * @Author: daidai
  * @Date: 2022-01-12 14:05:56
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-27 14:55:57
+ * @LastEditTime: 2023-08-07 17:12:07
  * @FilePath: \web-pc\src\pages\big-screen\main.js
  */
 import Vue from "vue";
@@ -25,6 +25,7 @@ import * as filters from '@/directives/filters'
 
 require('./mock/mock')//是否使用mock
 Vue.config.productionTip = false;
+
 // 自定义组件
 Vue.component("Echart",Echart)
 Vue.component("ItemWrap",ItemWrap)
