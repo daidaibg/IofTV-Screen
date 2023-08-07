@@ -2,19 +2,23 @@
  * @Author: daidai
  * @Date: 2021-12-06 10:58:24
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-04-27 16:54:32
+ * @LastEditTime: 2023-08-02 14:56:12
  * @FilePath: \web-pc\src\config\UtilVar.js
  */
-var UtilVar = {
+let UtilVar = {
     ENC: false, //返回结果是否加密
-    baseUrl: `http://locolhost:8888`,
+    baseUrl: `http://localhost:8888`,
     code: 401,
 }
 const runtimeType = {
-
     production: () => {
+        /**
+         * 通过打包配置打某个环境的api地址
+         */
+        UtilVar.baseUrl = `http://localhost:8888`
     },
-    yh:()=>{
+    //测试环境
+    test:()=>{
 
     },
     //开发环境
@@ -23,6 +27,9 @@ const runtimeType = {
     },
     
 }
+console.log(process.env);
+
+//通过打包配置打某个环境的api地址
 runtimeType[process.env.VUE_APP_URL_ENV]()
 export default UtilVar
 
