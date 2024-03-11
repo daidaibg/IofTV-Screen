@@ -228,11 +228,11 @@ isSouthChinaSea:false,//默认不显示南海，改为true可显示南海
 
 ### 大屏QQ群
 
-QQ群号：713105837
+QQ群号：
 
-### 大屏二维码
+一群：713105837 （已满）
 
-QQ群二维码：
+二群：663629294
 
-![输入图片说明](https://gitee.com/MTrun/big-screen-vue-datav/raw/master/public/image.png)
+
 
