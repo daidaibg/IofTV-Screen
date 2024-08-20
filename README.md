@@ -107,7 +107,7 @@ npm start
 https://gitee.com/MTrun/big-screen-vue-datav/tree/master#%E4%B8%89%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D
 
 ### 取消mock模拟数据
-
+取消后请对接自己后端接口
 ```javascript
 // src\main.js文件
 把下面这句话注释掉就可以了。
