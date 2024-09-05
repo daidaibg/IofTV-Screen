@@ -53,6 +53,12 @@
 
 [https://gitee.com/daidaibg/IofTV-Screen-Vue3](https://gitee.com/daidaibg/IofTV-Screen-Vue3)
 
+### Nuxt版本地址
+
+**github地址**
+
+[https://github.com/sukbearai/use-nuxt.git](https://github.com/sukbearai/use-nuxt.git)
+
 ### 1.1.0版本开始采用自适应组件方式，不再使用mixin方式。
 
 ###  滚动设置，自适应设置 
