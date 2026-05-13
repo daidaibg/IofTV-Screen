@@ -131,7 +131,7 @@ function ssyj() {
     const a = Mock.mock({
         success: true,
         data: {
-            "list|40":[{
+            "list|8":[{
                 alertdetail: "@csentence(5,10)",
                 "alertname|1": ["水浸告警","各种报警"],
                 alertvalue: "@float(60, 200)",

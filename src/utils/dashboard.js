@@ -1,4 +1,4 @@
-// 清理组件上的轮询定时器，避免重复开启或页面销毁后继续请求。
+// 清理组件上的轮询定时器，避免重复开启或组件销毁后继续请求。
 export const clearTimer = (vm, timerKey = "timer") => {
   if (!vm[timerKey]) {
     return;
@@ -34,17 +34,6 @@ export const bindChartHoverPolling = (
   chart.on("mouseover", () => clearTimer(vm, timerKey));
   chart.on("mouseout", () => startPolling(vm, callback, timerKey));
   chart.__pollingBound = true;
-};
-
-// 无缝滚动组件首次渲染时先静止，等 waitTime 后再恢复配置里的滚动速度。
-export const syncScrollStep = (vm, optionKey = "defaultOption") => {
-  clearTimeout(vm._scrollStepTimer);
-  vm._scrollStepTimer = setTimeout(() => {
-    vm[optionKey] = {
-      ...vm[optionKey],
-      step: vm.$store.state.setting.defaultOption.step,
-    };
-  }, vm.$store.state.setting.defaultOption.waitTime);
 };
 
 // 列表组件销毁时顺手把滚动恢复计时器也清掉。
