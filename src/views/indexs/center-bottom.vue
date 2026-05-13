@@ -1,41 +1,34 @@
 <template>
   <div class="center_bottom">
-    <Echart
-      :options="options"
-      id="bottomLeftChart"
-      class="echarts_bottom"
-    ></Echart>
+    <Echart :options="options" id="bottomLeftChart" class="echarts_bottom" />
   </div>
 </template>
 
 <script>
 import { currentGET } from "api";
 import { graphic } from "echarts";
+
 export default {
   data() {
     return {
       options: {},
     };
   },
-  props: {},
   mounted() {
     this.getData();
   },
   methods: {
-    getData() {
-      this.pageflag = true;
-      currentGET("big6", { companyName: this.companyName }).then((res) => {
-        console.log("安装计划", res);
-        if (res.success) {
-          this.init(res.data);
-        } else {
-          this.pageflag = false;
-          this.$Message({
-            text: res.msg,
-            type: "warning",
-          });
-        }
-      });
+    async getData() {
+      const res = await currentGET("big6");
+      if (!res.success) {
+        this.$Message({
+          text: res.msg,
+          type: "warning",
+        });
+        return;
+      }
+
+      this.init(res.data);
     },
     init(newData) {
       this.options = {
@@ -46,33 +39,21 @@ export default {
           textStyle: {
             color: "#FFF",
           },
-          formatter: function (params) {
-            // 添加单位
-            var result = params[0].name + "<br>";
-            params.forEach(function (item) {
-              if (item.value) {
-                if (item.seriesName == "安装率") {
-                  result +=
-                    item.marker +
-                    " " +
-                    item.seriesName +
-                    " : " +
-                    item.value +
-                    "%</br>";
-                } else {
-                  result +=
-                    item.marker +
-                    " " +
-                    item.seriesName +
-                    " : " +
-                    item.value +
-                    "个</br>";
+          formatter(params) {
+            return params
+              .map((item, index) => {
+                if (index === 0) {
+                  return item.name;
                 }
-              } else {
-                result += item.marker + " " + item.seriesName + " :  - </br>";
-              }
-            });
-            return result;
+
+                if (!item.value) {
+                  return `${item.marker} ${item.seriesName} : -`;
+                }
+
+                const suffix = item.seriesName === "安装率" ? "%" : "个";
+                return `${item.marker} ${item.seriesName} : ${item.value}${suffix}`;
+              })
+              .join("<br>");
           },
         },
         legend: {
@@ -107,7 +88,6 @@ export default {
                 color: "#B4B4B4",
               },
             },
-
             axisLabel: {
               formatter: "{value}",
             },
@@ -173,6 +153,7 @@ export default {
   },
 };
 </script>
+
 <style lang="scss" scoped>
 .center_bottom {
   width: 100%;

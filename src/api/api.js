@@ -1,168 +1,129 @@
-
-/*
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2023-08-02 14:58:23
- */
-import axios from 'axios';
+import axios from "axios";
 import UtilVar from "@/config/UtilVar";
-import router from '@/router'
 
-let baseUrl = UtilVar.baseUrl
-const CancelToken = axios.CancelToken;
-export { baseUrl };
-// axios.defaults.withCredentials = true;
-// 添加请求拦截器
-axios.interceptors.request.use(function (config) {
-    // 在发送请求之前做些什么 传token
-    let token = localStorage.getItem("token");
-    config.headers.common['Content-Type'] = "application/json;charset=utf-8";
-    config.headers.common['token'] = token;  //Authorization
-    return config;
-}, function (error) {
-    // 对请求错误做些什么
-    console.log(error)
-    return Promise.reject(error);
+export const baseUrl = UtilVar.baseUrl;
+
+const service = axios.create({
+  baseURL: baseUrl,
 });
-/**
- * @响应拦截
- */
-axios.interceptors.response.use(response => {
-  
+
+const withEncHeaders = () => ({
+  headers: {
+    enc: UtilVar.ENC,
+  },
+});
+
+const withAuthHeaders = (config = {}) => {
+  const token = localStorage.getItem("token");
+
+  return {
+    ...config,
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+      token,
+      ...(config.headers || {}),
+    },
+  };
+};
+
+service.interceptors.request.use(
+  (config) => withAuthHeaders(config),
+  (error) => Promise.reject(error)
+);
+
+service.interceptors.response.use(
+  (response) => {
     if (response.status !== 200) {
-        return Promise.reject(response)
+      return Promise.reject(response);
     }
-      /**
-     * @code 登录过期 token验证失败 根据后端调 
-     */
-    if (response.data.code == UtilVar.code) {
-        // router.push("/login")
+
+    if (response.data.code === UtilVar.code) {
+      return Promise.reject(response.data);
     }
-    return response.data
-}, error => {
-    console.error(error);
-    let err = {
+
+    return response.data;
+  },
+  (error) =>
+    Promise.reject(
+      error || {
         success: false,
-        msg: "未知异常，请联系管理员！"
-    }
-    return Promise.reject(err)
-})
+        msg: "未知异常，请联系管理员！",
+      }
+    )
+);
 
-let configs_ENC = {
-    headers: { 'enc': UtilVar.ENC }
-}
-//处理是否加密数据
-let isEncryptionParam = (params) => {
-    return params
+const request = async (method, url, { params, data, config } = {}) => {
+  try {
+    return await service.request({
+      method,
+      url,
+      params,
+      data,
+      ...withEncHeaders(),
+      ...(config || {}),
+    });
+  } catch (error) {
+    return error;
+  }
+};
 
-}
-export const GET = async (url, params) => {
-    try {
-        params = isEncryptionParam(params)
-        const data = await axios.get(`${baseUrl}${url}`, {
-            params: params,
-            headers: configs_ENC.headers
-        }, configs_ENC);
-        return data;
-    } catch (error) {
-        return error;
-    }
-}
-//没有基地址 访问根目录下文件
+export const GET = (url, params) => request("get", url, { params });
 
 export const GETNOBASE = async (url, params) => {
-    try {
-        const data = await axios.get(url, {
-            params: params,
-        });
-        return data;
-    } catch (error) {
-        return error;
-    }
-}
-export const POST = async (url, params) => {
-    try {
-        params = isEncryptionParam(params)
-        const data = await axios.post(`${baseUrl}${url}`, params, configs_ENC);
-        return data;
-    } catch (error) {
-        return error;
-    }
-}
-export const PUT = async (url, params) => {
-    try {
-        params = isEncryptionParam(params)
-        const data = await axios.put(`${baseUrl}${url}`, params, configs_ENC);
-        return data;
-    } catch (error) {
-        return error;
-    }
-}
-export const DELETE = async (url, params) => {
-    // console.log(params)
-    try {
-        params = isEncryptionParam(params)
-        const data = await axios.delete(`${baseUrl}${url}`, { data: params, headers: configs_ENC.headers }, configs_ENC);
-        return data;
-    } catch (error) {
-        return error;
-    }
-}
+  try {
+    const response = await axios.get(url, { params });
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+};
 
+export const POST = (url, params) => request("post", url, { data: params });
 
-/**
- * @文件类型提交方法
- */
-let configs = {
-    headers: { 'Content-Type': 'multipart/form-data' },
+export const PUT = (url, params) => request("put", url, { data: params });
 
-}
-export const FILESubmit = async (url, params, config) => {
-    try {
-        const data = await axios.post(`${baseUrl}${url}`, params, {
-            ...configs,
-            cancelToken: new CancelToken(function executor(c) {
-                config.setCancel && config.setCancel(c)
-            }),
-            onUploadProgress: (e) => {
-                if (e.total > 0) {
-                    e.percent = e.loaded / e.total * 100;
-                }
-                // console.log(config)
-                config.onProgress && config.onProgress(e)
-            },
+export const DELETE = (url, params) =>
+  request("delete", url, {
+    data: params,
+  });
 
-        });
-        return data;
-    } catch (err) {
-        return err;
-    }
-}
+export const FILESubmit = async (url, params, config = {}) => {
+  try {
+    return await service.post(url, params, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      cancelToken: new axios.CancelToken((cancel) => {
+        if (config.setCancel) {
+          config.setCancel(cancel);
+        }
+      }),
+      onUploadProgress: (event) => {
+        if (event.total > 0) {
+          event.percent = (event.loaded / event.total) * 100;
+        }
 
-/**
- * 下载文档流
- * @param {config.responseType} 下载文件流根据后端 配置   arraybuffer || blod
- */
+        if (config.onProgress) {
+          config.onProgress(event);
+        }
+      },
+    });
+  } catch (error) {
+    return error;
+  }
+};
+
 export const FILE = async (config = {}, body, params) => {
-    try {
-        const data = await axios({
-            method: config.method || 'get',
-            url: `${baseUrl}${config.url}`,
-            data: body,
-            params: params,
-            responseType: config.responseType || 'blob',
-            onDownloadProgress: (e) => {
-                // console.log(e,e.currentTarget)
-                // if (e.currentTarget.response.size > 0) {
-                //     e.percent = e.loaded / e.currentTarget.response.size * 100;
-                // }
-                // event.srcElement.getResponseHeader('content-length')
-                config.onProgress && config.onProgress(e)
-            },
-        });
-        return data;
-    } catch (err) {
-        return err;
-    }
-}
-
-
+  try {
+    return await service.request({
+      method: config.method || "get",
+      url: config.url,
+      data: body,
+      params,
+      responseType: config.responseType || "blob",
+      onDownloadProgress: config.onProgress,
+    });
+  } catch (error) {
+    return error;
+  }
+};

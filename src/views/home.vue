@@ -1,12 +1,4 @@
-<!--
- * @Author: daidai
- * @Date: 2022-01-12 14:23:32
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-09 14:47:24
- * @FilePath: \web-pc\src\pages\big-screen\view\home.vue
--->
 <template>
-  <!-- <div id="index" ref="appRef" class="index_home" :class="{ pageisScale: isScale }"> -->
   <ScaleScreen
     :width="1920"
     :height="1080"
@@ -16,7 +8,6 @@
     <div class="bg">
       <dv-loading v-if="loading">Loading...</dv-loading>
       <div v-else class="host-body">
-        <!-- 头部 s -->
         <div class="d-flex jc-center title_wrap">
           <div class="zuojuxing"></div>
           <div class="youjuxing"></div>
@@ -35,43 +26,37 @@
             ></i>
           </div>
         </div>
-        <!-- 头部 e-->
-        <!-- 内容  s-->
-        <router-view></router-view>
-        <!-- 内容 e -->
+        <router-view />
       </div>
     </div>
     <Setting ref="setting" />
   </ScaleScreen>
-  <!-- </div> -->
 </template>
 
 <script>
-import { formatTime } from "../utils/index.js";
+import { formatTime } from "../utils";
 import Setting from "./setting.vue";
 import ScaleScreen from "@/components/scale-screen/scale-screen.vue";
+
+const weekday = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+
 export default {
   components: { Setting, ScaleScreen },
   data() {
     return {
       timing: null,
       loading: true,
-      dateDay: null,
-      dateYear: null,
-      dateWeek: null,
-      weekday: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
+      dateDay: "",
+      dateYear: "",
+      dateWeek: "",
     };
   },
-  filters: {
-    numsFilter(msg) {
-      return msg || 0;
-    },
-  },
-  computed: {},
-  created() {},
   mounted() {
-    this.timeFn();
-    this.cancelLoading();
+    this.updateClock();
+    this.timing = setInterval(this.updateClock, 1000);
+    setTimeout(() => {
+      this.loading = false;
+    }, 500);
   },
   beforeDestroy() {
     clearInterval(this.timing);
@@ -80,18 +65,11 @@ export default {
     showSetting() {
       this.$refs.setting.init();
     },
-    timeFn() {
-      this.timing = setInterval(() => {
-        this.dateDay = formatTime(new Date(), "HH: mm: ss");
-        this.dateYear = formatTime(new Date(), "yyyy-MM-dd");
-        this.dateWeek = this.weekday[new Date().getDay()];
-      }, 1000);
-    },
-    cancelLoading() {
-      let timer = setTimeout(() => {
-        this.loading = false;
-        clearTimeout(timer);
-      }, 500);
+    updateClock() {
+      const now = new Date();
+      this.dateDay = formatTime(now, "HH: mm: ss");
+      this.dateYear = formatTime(now, "yyyy-MM-dd");
+      this.dateWeek = weekday[now.getDay()];
     },
   },
 };

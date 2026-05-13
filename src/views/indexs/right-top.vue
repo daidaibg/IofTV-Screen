@@ -1,17 +1,10 @@
-<!--
- * @Author: daidai
- * @Date: 2022-03-01 14:13:04
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-27 15:04:49
- * @FilePath: \web-pc\src\pages\big-screen\view\indexs\right-top.vue
--->
 <template>
   <Echart
+    v-if="pageflag"
     id="rightTop"
+    ref="charts"
     :options="option"
     class="right_top_inner"
-    v-if="pageflag"
-    ref="charts"
   />
   <Reacquire v-else @onclick="getData" style="line-height: 200px">
     重新获取
@@ -20,7 +13,73 @@
 
 <script>
 import { currentGET } from "api/modules";
-import {graphic} from "echarts"
+import { graphic } from "echarts";
+import {
+  bindChartHoverPolling,
+  clearTimer,
+  startPolling,
+} from "@/utils/dashboard";
+
+const createLineSeries = (name, color, data) => ({
+  data,
+  type: "line",
+  smooth: true,
+  symbol: "none",
+  name,
+  color,
+  areaStyle: {
+    color: new graphic.LinearGradient(0, 0, 0, 1, [
+      {
+        offset: 0,
+        color,
+      },
+      {
+        offset: 1,
+        color: color.replace(".7)", ".0)"),
+      },
+    ]),
+  },
+  markPoint: {
+    data: [
+      {
+        name: "最大值",
+        type: "max",
+        valueDim: "y",
+        symbol: "rect",
+        symbolSize: [60, 26],
+        symbolOffset: [0, -20],
+        itemStyle: {
+          color: "rgba(0,0,0,0)",
+        },
+        label: {
+          color,
+          backgroundColor: color.replace(".7)", ".1)"),
+          borderRadius: 6,
+          padding: [7, 14],
+          borderWidth: 0.5,
+          borderColor: color.replace(".7)", ".5)"),
+          formatter: `${name}：{c}`,
+        },
+      },
+      {
+        name: "最大值",
+        type: "max",
+        valueDim: "y",
+        symbol: "circle",
+        symbolSize: 6,
+        itemStyle: {
+          color,
+          shadowColor: color,
+          shadowBlur: 8,
+        },
+        label: {
+          formatter: "",
+        },
+      },
+    ],
+  },
+});
+
 export default {
   data() {
     return {
@@ -29,74 +88,37 @@ export default {
       timer: null,
     };
   },
-  created() {
-   
-  },
-
   mounted() {
-     this.getData();
+    this.getData();
   },
   beforeDestroy() {
-    this.clearData();
+    clearTimer(this);
   },
   methods: {
-    clearData() {
-      if (this.timer) {
-        clearInterval(this.timer);
-        this.timer = null;
-      }
-    },
-    getData() {
+    async getData() {
       this.pageflag = true;
-      // this.pageflag =false
-      currentGET("big4").then((res) => {
-        if (!this.timer) {
-          console.log("报警次数", res);
-        }
-        if (res.success) {
-          this.countUserNumData = res.data;
-          this.$nextTick(() => {
-            this.init(res.data.dateList, res.data.numList, res.data.numList2),
-              this.switper();
-          });
-        } else {
-          this.pageflag = false;
-          this.$Message({
-            text: res.msg,
-            type: "warning",
-          });
-        }
-      });
-    },
-    //轮询
-    switper() {
-      if (this.timer) {
+
+      const res = await currentGET("big4");
+      if (!res.success) {
+        this.pageflag = false;
+        this.$Message({
+          text: res.msg,
+          type: "warning",
+        });
         return;
       }
-      let looper = (a) => {
-        this.getData();
-      };
-      this.timer = setInterval(
-        looper,
-        this.$store.state.setting.echartsAutoTime
-      );
-      let myChart = this.$refs.charts.chart;
-      myChart.on("mouseover", (params) => {
-        this.clearData();
-      });
-      myChart.on("mouseout", (params) => {
-        this.timer = setInterval(
-          looper,
-          this.$store.state.setting.echartsAutoTime
-        );
-      });
+
+      this.init(res.data.dateList, res.data.numList, res.data.numList2);
+      await this.$nextTick();
+      startPolling(this, this.getData);
+      bindChartHoverPolling(this, "charts", this.getData);
     },
     init(xData, yData, yData2) {
       this.option = {
         xAxis: {
           type: "category",
           data: xData,
-          boundaryGap: false, // 不留白，从原点开始
+          boundaryGap: false,
           splitLine: {
             show: true,
             lineStyle: {
@@ -104,7 +126,6 @@ export default {
             },
           },
           axisLine: {
-            // show:false,
             lineStyle: {
               color: "rgba(31,99,163,.1)",
             },
@@ -141,7 +162,6 @@ export default {
           },
         },
         grid: {
-          //布局
           show: true,
           left: "10px",
           right: "30px",
@@ -151,148 +171,16 @@ export default {
           borderColor: "#1F63A3",
         },
         series: [
-          {
-            data: yData,
-            type: "line",
-            smooth: true,
-            symbol: "none", //去除点
-            name: "报警1次数",
-            color: "rgba(252,144,16,.7)",
-            areaStyle: {
-                //右，下，左，上
-                color: new graphic.LinearGradient(
-                  0,
-                  0,
-                  0,
-                  1,
-                  [
-                    {
-                      offset: 0,
-                      color: "rgba(252,144,16,.7)",
-                    },
-                    {
-                      offset: 1,
-                      color: "rgba(252,144,16,.0)",
-                    },
-                  ],
-                  false
-                ),
-            },
-            markPoint: {
-              data: [
-                {
-                  name: "最大值",
-                  type: "max",
-                  valueDim: "y",
-                  symbol: "rect",
-                  symbolSize: [60, 26],
-                  symbolOffset: [0, -20],
-                  itemStyle: {
-                    color: "rgba(0,0,0,0)",
-                  },
-                  label: {
-                    color: "#FC9010",
-                    backgroundColor: "rgba(252,144,16,0.1)",
-                    borderRadius: 6,
-                    padding: [7, 14],
-                    borderWidth: 0.5,
-                    borderColor: "rgba(252,144,16,.5)",
-                    formatter: "报警1：{c}",
-                  },
-                },
-                {
-                  name: "最大值",
-                  type: "max",
-                  valueDim: "y",
-                  symbol: "circle",
-                  symbolSize: 6,
-                  itemStyle: {
-                    color: "#FC9010",
-                    shadowColor: "#FC9010",
-                    shadowBlur: 8,
-                  },
-                  label: {
-                    formatter: "",
-                  },
-                },
-              ],
-            },
-          },
-          {
-            data: yData2,
-            type: "line",
-            smooth: true,
-            symbol: "none", //去除点
-            name: "报警2次数",
-            color: "rgba(9,202,243,.7)",
-            areaStyle: {
-                //右，下，左，上
-                color: new graphic.LinearGradient(
-                  0,
-                  0,
-                  0,
-                  1,
-                  [
-                    {
-                      offset: 0,
-                      color: "rgba(9,202,243,.7)",
-                    },
-                    {
-                      offset: 1,
-                      color: "rgba(9,202,243,.0)",
-                    },
-                  ],
-                  false
-                ),
-            },
-            markPoint: {
-              data: [
-                {
-                  name: "最大值",
-                  type: "max",
-                  valueDim: "y",
-                  symbol: "rect",
-                  symbolSize: [60, 26],
-                  symbolOffset: [0, -20],
-                  itemStyle: {
-                    color: "rgba(0,0,0,0)",
-                  },
-                  label: {
-                    color: "#09CAF3",
-                    backgroundColor: "rgba(9,202,243,0.1)",
-
-                    borderRadius: 6,
-                    borderColor: "rgba(9,202,243,.5)",
-                    padding: [7, 14],
-                    formatter: "报警2：{c}",
-                    borderWidth: 0.5,
-                  },
-                },
-                {
-                  name: "最大值",
-                  type: "max",
-                  valueDim: "y",
-                  symbol: "circle",
-                  symbolSize: 6,
-                  itemStyle: {
-                    color: "#09CAF3",
-                    shadowColor: "#09CAF3",
-                    shadowBlur: 8,
-                  },
-                  label: {
-                    formatter: "",
-                  },
-                },
-              ],
-            },
-          },
+          createLineSeries("报警1次数", "rgba(252,144,16,.7)", yData),
+          createLineSeries("报警2次数", "rgba(9,202,243,.7)", yData2),
         ],
       };
     },
   },
 };
 </script>
-<style lang='scss' scoped>
+
+<style lang="scss" scoped>
 .right_top_inner {
   margin-top: -8px;
 }

@@ -1,70 +1,58 @@
-<!--
- * @Author: daidai
- * @Date: 2022-02-28 16:29:08
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-27 15:05:45
- * @FilePath: \web-pc\src\pages\big-screen\components\echart\index.vue
--->
 <template>
-  <div :id="id" :class="className" :style="{ height: height, width: width }" />
+  <div :id="id" :class="className" :style="{ height, width }" />
 </template>
 
 <script>
-import * as echarts from 'echarts';
+import * as echarts from "echarts";
+
 export default {
-  name: 'echart',
+  name: "echart",
   props: {
     className: {
       type: String,
-      default: 'chart'
+      default: "chart",
     },
     id: {
       type: String,
-      default: 'chart'
+      default: "chart",
     },
     width: {
       type: String,
-      default: '100%'
+      default: "100%",
     },
     height: {
       type: String,
-      default: '100%'
+      default: "100%",
     },
     options: {
       type: Object,
-      default: ()=>({})
-    }
+      default: () => ({}),
+    },
   },
-  data () {
+  data() {
     return {
-      chart: null
-    }
+      chart: null,
+    };
   },
   watch: {
     options: {
-      handler (options) {
-        // 设置true清空echart缓存
-        this.chart.setOption(options, true)
+      handler(options) {
+        if (this.chart) {
+          this.chart.setOption(options, true);
+        }
       },
-      deep: true
+      deep: true,
+    },
+  },
+  mounted() {
+    this.chart = echarts.init(this.$el);
+    this.chart.setOption(this.options, true);
+  },
+  beforeDestroy() {
+    if (this.chart) {
+      this.chart.dispose();
+      this.chart = null;
     }
   },
-  mounted () {
-    this.initChart();
-  },
-  beforeDestroy () {
-    this.chart.dispose()
-    this.chart = null
-  },
-  methods: {
-    initChart () {
-      // 初始化echart
-      this.chart = echarts.init(this.$el)
-      this.chart.setOption(this.options, true)
-    }
-  }
-}
+};
 </script>
-
-<style>
-</style>

@@ -1,163 +1,192 @@
-<!--
- * @Author: daidai
- * @Date: 2022-03-01 15:51:43
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-29 15:12:46
- * @FilePath: \web-pc\src\pages\big-screen\view\indexs\right-bottom.vue
--->
 <template>
-  <div class="right_bottom">
-    <dv-capsule-chart :config="config" style="width:100%;height:260px" />
+  <div
+    v-if="pageflag"
+    class="right_center_wrap beautify-scroll-def"
+    :class="{ 'overflow-y-auto': !scrollEnabled }"
+  >
+    <component :is="scrollComponent" :data="list" :class-option="defaultOption">
+      <ul class="right_center">
+        <li v-for="(item, i) in list" :key="i" class="right_center_item">
+          <span class="orderNum">{{ i + 1 }}</span>
+          <div class="inner_right">
+            <div class="dibu"></div>
+            <div class="flex">
+              <div class="info">
+                <span class="labels">设备ID：</span>
+                <span class="contents zhuyao">{{ item.gatewayno }}</span>
+              </div>
+              <div class="info">
+                <span class="labels">型号：</span>
+                <span class="contents">{{ item.terminalno }}</span>
+              </div>
+              <div class="info">
+                <span class="labels">告警值：</span>
+                <span class="contents warning">
+                  {{ item.alertvalue | montionFilter }}
+                </span>
+              </div>
+            </div>
+
+            <div class="flex">
+              <div class="info">
+                <span class="labels">地址：</span>
+                <span class="contents ciyao" style="font-size: 12px">
+                  {{ addressText(item) }}
+                </span>
+              </div>
+              <div class="info time">
+                <span class="labels">时间：</span>
+                <span class="contents" style="font-size: 12px">
+                  {{ item.createtime }}
+                </span>
+              </div>
+            </div>
+            <div class="flex">
+              <div class="info">
+                <span class="labels">报警内容：</span>
+                <span class="contents ciyao" :class="{ warning: item.alertdetail }">
+                  {{ item.alertdetail || "无" }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </component>
   </div>
+  <Reacquire v-else @onclick="getData" style="line-height: 200px" />
 </template>
 
 <script>
-import { currentGET } from 'api/modules'
+import { currentGET } from "api/modules";
+import vueSeamlessScroll from "vue-seamless-scroll";
+import Kong from "../../components/kong.vue";
+import {
+  clearScrollStepTimer,
+  joinRegionName,
+  syncScrollStep,
+} from "@/utils/dashboard";
+
 export default {
+  components: { vueSeamlessScroll, Kong },
   data() {
     return {
-      gatewayno: '',
-      config: {
-        showValue: true,
-        unit: "次",
-        data: []
+      list: [],
+      pageflag: true,
+      defaultOption: {
+        ...this.$store.state.setting.defaultOption,
+        limitMoveNum: 3,
+        singleHeight: 250,
+        step: 0,
       },
-
     };
   },
-  created() {
-    this.getData()
-
-  },
   computed: {
+    scrollEnabled() {
+      return this.$store.state.setting.ssyjSwiper;
+    },
+    scrollComponent() {
+      return this.scrollEnabled ? vueSeamlessScroll : Kong;
+    },
   },
-  mounted() { },
+  created() {
+    this.getData();
+  },
   beforeDestroy() {
-    this.clearData()
+    clearScrollStepTimer(this);
   },
   methods: {
-    clearData() {
-      if (this.timer) {
-        clearInterval(this.timer)
-        this.timer = null
-      }
+    addressText(item) {
+      return joinRegionName(item);
     },
-    //轮询
-    switper() {
-      if (this.timer) {
-        return
-      }
-      let looper = (a) => {
-        this.getData()
-      };
-      this.timer = setInterval(looper, this.$store.state.setting.echartsAutoTime);
-    },
-    getData() {
-      this.pageflag = true
-      // this.pageflag =false
-      currentGET('big7', { gatewayno: this.gatewayno }).then(res => {
+    async getData() {
+      this.pageflag = true;
 
-        if (!this.timer) {
-          console.log('报警排名', res);
-        }
-        if (res.success) {
-          this.config = {
-            ...this.config,
-            data: res.data
-          }
-          this.switper()
-        } else {
-          this.pageflag = false
-          this.srcList = []
-          this.$Message({
-            text: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      const res = await currentGET("big5", { limitNum: 50 });
+      if (!res.success) {
+        this.pageflag = false;
+        this.$Message.warning(res.msg);
+        return;
+      }
+
+      this.list = res.data.list;
+      syncScrollStep(this);
     },
   },
 };
 </script>
-<style lang='scss' scoped>
-.list_Wrap {
+
+<style lang="scss" scoped>
+.right_center {
+  width: 100%;
   height: 100%;
-  overflow: hidden;
-  :deep(.kong)   {
-    width: auto;
-  }
-}
 
-.sbtxSwiperclass {
-  .img_wrap {
-    overflow-x: auto;
-  }
-
-}
-
-.right_bottom {
-  box-sizing: border-box;
-  padding: 0 16px;
-
-  .searchform {
-    height: 80px;
+  .right_center_item {
     display: flex;
     align-items: center;
     justify-content: center;
+    height: auto;
+    padding: 10px;
+    font-size: 14px;
+    color: #fff;
 
-    .searchform_item {
+    .orderNum {
+      margin: 0 20px 0 -20px;
+    }
+
+    .inner_right {
+      position: relative;
+      height: 100%;
+      width: 400px;
+      flex-shrink: 0;
+      line-height: 1.5;
+
+      .dibu {
+        position: absolute;
+        height: 2px;
+        width: 104%;
+        background-image: url("../../assets/img/zuo_xuxian.png");
+        bottom: -12px;
+        left: -2%;
+        background-size: cover;
+      }
+    }
+
+    .info {
+      margin-right: 10px;
       display: flex;
-      justify-content: center;
       align-items: center;
 
-      label {
-        margin-right: 10px;
+      .labels {
+        flex-shrink: 0;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .zhuyao {
+        color: $primary-color;
+        font-size: 15px;
+      }
+
+      .ciyao {
         color: rgba(255, 255, 255, 0.8);
       }
 
-      button {
-        margin-left: 30px;
-      }
-
-      input {}
-    }
-  }
-
-  .img_wrap {
-    display: flex;
-    // justify-content: space-around;
-    box-sizing: border-box;
-    padding: 0 0 20px;
-    // overflow-x: auto;
-
-    li {
-      width: 105px;
-      height: 137px;
-      border-radius: 6px;
-      overflow: hidden;
-      cursor: pointer;
-      // background: #84ccc9;
-      // border: 1px solid #ffffff;
-      overflow: hidden;
-      flex-shrink: 0;
-      margin: 0 10px;
-
-      img {
-        flex-shrink: 0;
+      .warning {
+        color: #e6a23c;
+        font-size: 15px;
       }
     }
-
-
-
-
   }
+}
 
-  .noData {
-    width: 100%;
-    line-height: 100px;
-    text-align: center;
-    color: rgb(129, 128, 128);
+.right_center_wrap {
+  overflow: hidden;
+  width: 100%;
+  height: 250px;
+}
 
-  }
+.overflow-y-auto {
+  overflow-y: auto;
 }
 </style>

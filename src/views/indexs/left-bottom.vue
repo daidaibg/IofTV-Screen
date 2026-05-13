@@ -1,19 +1,12 @@
-<!--
- * @Author: daidai
- * @Date: 2022-03-01 09:43:37
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-09 11:40:22
- * @FilePath: \web-pc\src\pages\big-screen\view\indexs\left-bottom.vue
--->
 <template>
   <div
     v-if="pageflag"
     class="left_boottom_wrap beautify-scroll-def"
-    :class="{ 'overflow-y-auto': !sbtxSwiperFlag }"
+    :class="{ 'overflow-y-auto': !scrollEnabled }"
   >
-    <component :is="components" :data="list" :class-option="defaultOption">
+    <component :is="scrollComponent" :data="list" :class-option="defaultOption">
       <ul class="left_boottom">
-        <li class="left_boottom_item" v-for="(item, i) in list" :key="i">
+        <li v-for="(item, i) in list" :key="i" class="left_boottom_item">
           <span class="orderNum doudong">{{ i + 1 }}</span>
           <div class="inner_right">
             <div class="dibu"></div>
@@ -21,31 +14,32 @@
               <div class="info">
                 <span class="labels">设备ID：</span>
                 <span class="contents zhuyao doudong wangguan">
-                  {{ item.gatewayno }}</span
-                >
+                  {{ item.gatewayno }}
+                </span>
               </div>
               <div class="info">
                 <span class="labels">时间：</span>
-                <span class="contents " style="font-size: 12px">
-                  {{ item.createTime }}</span
-                >
+                <span class="contents" style="font-size: 12px">
+                  {{ item.createTime }}
+                </span>
               </div>
             </div>
 
-              <span
-                class="types doudong"
-                :class="{
-                  typeRed: item.onlineState == 0,
-                  typeGreen: item.onlineState == 1,
-                }"
-                >{{ item.onlineState == 1 ? "上线" : "下线" }}</span
-              >
+            <span
+              class="types doudong"
+              :class="{
+                typeRed: item.onlineState == 0,
+                typeGreen: item.onlineState == 1,
+              }"
+            >
+              {{ item.onlineState == 1 ? "在线" : "离线" }}
+            </span>
 
             <div class="info addresswrap">
               <span class="labels">地址：</span>
               <span class="contents ciyao" style="font-size: 12px">
-                {{ addressHandle(item) }}</span
-              >
+                {{ addressHandle(item) }}
+              </span>
             </div>
           </div>
         </li>
@@ -58,78 +52,67 @@
 
 <script>
 import { currentGET } from "api";
-import vueSeamlessScroll from "vue-seamless-scroll"; // vue2引入方式
+import vueSeamlessScroll from "vue-seamless-scroll";
 import Kong from "../../components/kong.vue";
+import {
+  clearScrollStepTimer,
+  joinRegionName,
+  syncScrollStep,
+} from "@/utils/dashboard";
+
 export default {
   components: { vueSeamlessScroll, Kong },
   data() {
     return {
       list: [],
       pageflag: true,
-      components: vueSeamlessScroll,
       defaultOption: {
         ...this.$store.state.setting.defaultOption,
         singleHeight: 240,
-        limitMoveNum: 5, 
+        limitMoveNum: 5,
         step: 0,
       },
     };
   },
   computed: {
-    sbtxSwiperFlag() {
-      let sbtxSwiper = this.$store.state.setting.sbtxSwiper;
-      if (sbtxSwiper) {
-        this.components = vueSeamlessScroll;
-      } else {
-        this.components = Kong;
-      }
-      return sbtxSwiper;
+    scrollEnabled() {
+      return this.$store.state.setting.sbtxSwiper;
+    },
+    scrollComponent() {
+      return this.scrollEnabled ? vueSeamlessScroll : Kong;
     },
   },
-  created() {
-    
-  },
-
   mounted() {
     this.getData();
   },
+  beforeDestroy() {
+    clearScrollStepTimer(this);
+  },
   methods: {
     addressHandle(item) {
-      let name = item.provinceName;
-      if (item.cityName) {
-        name += "/" + item.cityName;
-        if (item.countyName) {
-          name += "/" + item.countyName;
-        }
-      }
-      return name;
+      return joinRegionName(item);
     },
-    getData() {
+    async getData() {
       this.pageflag = true;
-      // this.pageflag =false
-      currentGET("big3", { limitNum: 20 }).then((res) => {
-        console.log("设备提醒", res);
-        if (res.success) {
-          this.countUserNumData = res.data;
-          this.list = res.data.list;
-          let timer = setTimeout(() => {
-            clearTimeout(timer);
-            this.defaultOption.step =
-              this.$store.state.setting.defaultOption.step;
-          }, this.$store.state.setting.defaultOption.waitTime);
-        } else {
-          this.pageflag = false;
-          this.$Message({
-            text: res.msg,
-            type: "warning",
-          });
-        }
-      });
+
+      const res = await currentGET("big3", { limitNum: 20 });
+      if (!res.success) {
+        this.pageflag = false;
+        this.$Message({
+          text: res.msg,
+          type: "warning",
+        });
+        return;
+      }
+
+      this.list = res.data.list;
+      syncScrollStep(this);
     },
   },
 };
 </script>
-<style lang='scss' scoped>
+
+<style lang="scss" scoped>
 .left_boottom_wrap {
   overflow: hidden;
   width: 100%;
@@ -137,7 +120,6 @@ export default {
 }
 
 .doudong {
-  //  vertical-align:middle;
   overflow: hidden;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
@@ -160,6 +142,7 @@ export default {
     padding: 8px;
     font-size: 14px;
     margin: 10px 0;
+
     .orderNum {
       margin: 0 16px 0 -20px;
     }
@@ -201,6 +184,7 @@ export default {
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
+
       .dibu {
         position: absolute;
         height: 2px;
@@ -210,6 +194,7 @@ export default {
         left: -2%;
         background-size: cover;
       }
+
       .addresswrap {
         width: 100%;
         display: flex;
@@ -225,17 +210,14 @@ export default {
       flex-shrink: 0;
     }
 
-
     .time {
       font-size: 12px;
-      // color: rgba(211, 210, 210,.8);
       color: #fff;
     }
 
     .address {
       font-size: 12px;
       cursor: pointer;
-      // @include text-overflow(1);
     }
 
     .types {

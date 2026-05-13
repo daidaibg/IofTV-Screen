@@ -1,10 +1,3 @@
-<!--
- * @Author: daidai
- * @Date: 2022-03-01 11:17:39
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-29 15:50:18
- * @FilePath: \web-pc\src\pages\big-screen\view\indexs\center-map.vue
--->
 <template>
   <div class="centermap">
     <div class="maptitle">
@@ -14,95 +7,94 @@
     </div>
     <div class="mapwrap">
       <dv-border-box-13>
-        <div class="quanguo" @click="getData('china')" v-if="code !== 'china'">
+        <div v-if="code !== 'china'" class="quanguo" @click="getData('china')">
           中国
         </div>
 
-        <Echart id="CenterMap" :options="options" ref="CenterMap" />
+        <Echart id="CenterMap" ref="CenterMap" :options="options" />
       </dv-border-box-13>
     </div>
   </div>
 </template>
 
 <script>
-import xzqCode from "../../utils/map/xzqCode";
-import { currentGET } from "api/modules";
 import * as echarts from "echarts";
+import xzqCode from "../../utils/map/xzqCode";
 import { GETNOBASE } from "api";
+import { currentGET } from "api/modules";
+
+const mapLevels = [
+  { gte: 1000, label: "1000个以上" },
+  { gte: 600, lte: 999, label: "600-999个" },
+  { gte: 200, lte: 599, label: "200-599个" },
+  { gte: 50, lte: 199, label: "50-199个" },
+  { gte: 10, lte: 49, label: "10-49个" },
+  { lte: 9, label: "1-9个" },
+];
+
 export default {
   data() {
     return {
       maptitle: "设备分布图",
       options: {},
-      code: "china", //china 代表中国 其他地市是行政编码
+      code: "china",
       echartBindClick: false,
-      isSouthChinaSea: false, //是否要展示南海群岛  修改此值请刷新页面
+      isSouthChinaSea: false,
     };
   },
-  created() {},
-
   mounted() {
-    // console.log(xzqCode);
     this.getData("china");
   },
   methods: {
-    getData(code) {
-      currentGET("big8", { regionCode: code }).then((res) => {
-        console.log("设备分布", res);
-        if (res.success) {
-          this.getGeojson(res.data.regionCode, res.data.dataList);
-          this.mapclick();
-        } else {
-          this.$Message.warning(res.msg);
-        }
-      });
+    async getData(code) {
+      const res = await currentGET("big8", { regionCode: code });
+      if (!res.success) {
+        this.$Message.warning(res.msg);
+        return;
+      }
+
+      await this.getGeojson(res.data.regionCode, res.data.dataList);
+      this.bindMapClick();
     },
-    /**
-     * @description: 获取geojson
-     * @param {*} name china 表示中国 其他省份行政区编码
-     * @param {*} mydata 接口返回列表数据
-     * @return {*}
-     */
-    async getGeojson(name, mydata) {
+    async getGeojson(name, sourceData) {
       this.code = name;
-      //如果要展示南海群岛并且展示的是中国的话
-      let geoname=name
-      if (this.isSouthChinaSea && name == "china") {
-        geoname = "chinaNanhai";
-      }
-      //如果有注册地图的话就不用再注册 了
-      let mapjson = echarts.getMap(name);
-      if (mapjson) {
-        mapjson = mapjson.geoJSON;
-      } else {
-        mapjson = await GETNOBASE(`./map-geojson/${geoname}.json`).then((res) => {
-          return res;
-        });
-        echarts.registerMap(name, mapjson);
-      }
-      let cityCenter = {};
-      let arr = mapjson.features;
-      //根据geojson获取省份中心点
-      arr.map((item) => {
-        cityCenter[item.properties.name] =
+      const mapName =
+        this.isSouthChinaSea && name === "china" ? "chinaNanhai" : name;
+      const geoJson = await this.loadMapJson(name, mapName);
+      const cityCenter = geoJson.features.reduce((accumulator, item) => {
+        accumulator[item.properties.name] =
           item.properties.centroid || item.properties.center;
-      });
-      let newData = [];
-      mydata.map((item) => {
-        if (cityCenter[item.name]) {
-          newData.push({
+        return accumulator;
+      }, {});
+
+      const pointData = sourceData.reduce((result, item) => {
+        const center = cityCenter[item.name];
+        if (center) {
+          result.push({
             name: item.name,
-            value: cityCenter[item.name].concat(item.value),
+            value: center.concat(item.value),
           });
         }
-      });
-      this.init(name, mydata, newData);
+        return result;
+      }, []);
+
+      this.init(name, sourceData, pointData);
     },
-    init(name, data, data2) {
-      // console.log(data2);
-      let top = 45;
-      let zoom = 1.05;
-      let option = {
+    async loadMapJson(name, mapName) {
+      const cacheMap = echarts.getMap(name);
+      if (cacheMap) {
+        return cacheMap.geoJSON;
+      }
+
+      const geoJson = await GETNOBASE(`./map-geojson/${mapName}.json`);
+      echarts.registerMap(name, geoJson);
+      return geoJson;
+    },
+    init(name, data, pointData) {
+      const top = 45;
+      const zoom = 1.05;
+
+      this.options = {
         backgroundColor: "rgba(0,0,0,0)",
         tooltip: {
           show: false,
@@ -113,16 +105,8 @@ export default {
         visualMap: {
           left: 20,
           bottom: 20,
-          pieces: [
-            { gte: 1000, label: "1000个以上" }, // 不指定 max，表示 max 为无限大（Infinity）。
-            { gte: 600, lte: 999, label: "600-999个" },
-            { gte: 200, lte: 599, label: "200-599个" },
-            { gte: 50, lte: 199, label: "49-199个" },
-            { gte: 10, lte: 49, label: "10-49个" },
-            { lte: 9, label: "1-9个" }, // 不指定 min，表示 min 为无限大（-Infinity）。
-          ],
+          pieces: mapLevels,
           inRange: {
-            // 渐变颜色，从小到大
             color: [
               "#c3d7df",
               "#5cb3cc",
@@ -139,10 +123,9 @@ export default {
         geo: {
           map: name,
           roam: false,
-          selectedMode: false, //是否允许选中多个区域
-          zoom: zoom,
-          top: top,
-          // aspectScale: 0.78,
+          selectedMode: false,
+          zoom,
+          top,
           show: false,
         },
         series: [
@@ -150,21 +133,17 @@ export default {
             name: "MAP",
             type: "map",
             map: name,
-            // aspectScale: 0.78,
-            data: data,
-            // data: [1,100],
-            selectedMode: false, //是否允许选中多个区域
-            zoom: zoom,
+            data,
+            selectedMode: false,
+            zoom,
             geoIndex: 1,
-            top: top,
+            top,
             tooltip: {
               show: true,
-              formatter: function (params) {
-                if (params.data) {
-                  return params.name + "：" + params.data["value"];
-                } else {
-                  return params.name;
-                }
+              formatter(params) {
+                return params.data
+                  ? `${params.name}：${params.data.value}`
+                  : params.name;
               },
               backgroundColor: "rgba(0,0,0,.6)",
               borderColor: "rgba(147, 235, 248, .8)",
@@ -175,16 +154,9 @@ export default {
             label: {
               show: false,
               color: "#000",
-              // position: [-10, 0],
-              formatter: function (val) {
-                // console.log(val)
-                if (val.data !== undefined) {
-                  return val.name.slice(0, 2);
-                } else {
-                  return "";
-                }
+              formatter(val) {
+                return val.data ? val.name.slice(0, 2) : "";
               },
-              rich: {},
             },
             emphasis: {
               label: {
@@ -206,14 +178,14 @@ export default {
                 colorStops: [
                   {
                     offset: 0,
-                    color: "rgba(147, 235, 248, 0)", // 0% 处的颜色
+                    color: "rgba(147, 235, 248, 0)",
                   },
                   {
                     offset: 1,
-                    color: "rgba(147, 235, 248, .2)", // 100% 处的颜色
+                    color: "rgba(147, 235, 248, .2)",
                   },
                 ],
-                globalCoord: false, // 缺为 false
+                globalCoord: false,
               },
               shadowColor: "rgba(128, 217, 248, .3)",
               shadowOffsetX: -2,
@@ -222,29 +194,25 @@ export default {
             },
           },
           {
-            data: data2,
+            data: pointData,
             type: "effectScatter",
             coordinateSystem: "geo",
-            symbolSize: function (val) {
+            symbolSize() {
               return 4;
-              // return val[2] / 50;
             },
             legendHoverLink: true,
             showEffectOn: "render",
             rippleEffect: {
-              // period: 4,
               scale: 6,
               color: "rgba(255,255,255, 1)",
               brushType: "fill",
             },
             tooltip: {
               show: true,
-              formatter: function (params) {
-                if (params.data) {
-                  return params.name + "：" + params.data["value"][2];
-                } else {
-                  return params.name;
-                }
+              formatter(params) {
+                return params.data
+                  ? `${params.name}：${params.data.value[2]}`
+                  : params.name;
               },
               backgroundColor: "rgba(0,0,0,.6)",
               borderColor: "rgba(147, 235, 248, .8)",
@@ -253,10 +221,9 @@ export default {
               },
             },
             label: {
-              formatter: (param) => {
+              formatter(param) {
                 return param.name.slice(0, 2);
               },
-
               fontSize: 11,
               offset: [0, 2],
               position: "bottom",
@@ -267,46 +234,37 @@ export default {
               color: "#FFF",
               show: true,
             },
-            // colorBy: "data",
             itemStyle: {
               color: "rgba(255,255,255,1)",
-              borderColor: "rgba(2255,255,255,2)",
+              borderColor: "rgba(255,255,255,2)",
               borderWidth: 4,
               shadowColor: "#000",
               shadowBlur: 10,
             },
           },
         ],
-         //动画效果
-            // animationDuration: 1000,
-            // animationEasing: 'linear',
-            // animationDurationUpdate: 1000
       };
-      this.options = option;
     },
-    message(text) {
-      this.$Message({
-        text: text,
-        type: "warning",
-      });
-    },
-    mapclick() {
-      if (this.echartBindClick) return;
-      //单击切换到级地图，当mapCode有值,说明可以切换到下级地图
+    bindMapClick() {
+      if (this.echartBindClick) {
+        return;
+      }
+
       this.$refs.CenterMap.chart.on("click", (params) => {
-        // console.log(params);
-        let xzqData = xzqCode[params.name];
-        if (xzqData) {
-          this.getData(xzqData.adcode);
-        } else {
-          this.message("暂无下级地市!");
+        const xzqData = xzqCode[params.name];
+        if (!xzqData) {
+          this.$Message.warning("暂无下级地市");
+          return;
         }
+
+        this.getData(xzqData.adcode);
       });
       this.echartBindClick = true;
     },
   },
 };
 </script>
+
 <style lang="scss" scoped>
 .centermap {
   margin-bottom: 30px;
@@ -353,7 +311,6 @@ export default {
   .mapwrap {
     height: 548px;
     width: 100%;
-    // padding: 0 0 10px 0;
     box-sizing: border-box;
     position: relative;
 

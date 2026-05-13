@@ -1,10 +1,3 @@
-/*
- * @Author: daidai
- * @Date: 2022-03-02 09:51:44
- * @LastEditors: daidai
- * @LastEditTime: 2022-03-02 09:51:45
- * @FilePath: \web-pc\src\pages\big-screen\utils\map\xzqCode.js
- */
    //获取中国行政区 code
 //    AMap.plugin("AMap.DistrictSearch", function () {
 //     var districtSearch = new AMap.DistrictSearch({
