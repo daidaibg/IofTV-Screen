@@ -1,3 +1,4 @@
+// 用于高频事件防抖，例如 resize、输入框联动查询等场景。
 export function debounce(fn, delay) {
   let timer;
 
@@ -9,6 +10,7 @@ export function debounce(fn, delay) {
   };
 }
 
+// 按传入模板格式化时间，兼容 yyyy-MM-dd、HH:mm:ss 等常见展示格式。
 export function formatTime(time, fmt) {
   if (!time) {
     return "";

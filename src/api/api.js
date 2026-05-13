@@ -3,16 +3,19 @@ import UtilVar from "@/config/UtilVar";
 
 export const baseUrl = UtilVar.baseUrl;
 
+// 统一使用同一个 axios 实例，避免请求配置散落在各个业务文件里。
 const service = axios.create({
   baseURL: baseUrl,
 });
 
+// 部分接口保留 enc 标记，后续如果切换加密方式只需要改这里。
 const withEncHeaders = () => ({
   headers: {
     enc: UtilVar.ENC,
   },
 });
 
+// 登录态和通用请求头在这里集中补齐，业务层只关心参数本身。
 const withAuthHeaders = (config = {}) => {
   const token = localStorage.getItem("token");
 
@@ -37,6 +40,7 @@ service.interceptors.response.use(
       return Promise.reject(response);
     }
 
+    // 按项目约定把业务态异常统一挡在请求层，页面里直接处理结果即可。
     if (response.data.code === UtilVar.code) {
       return Promise.reject(response.data);
     }
@@ -52,6 +56,7 @@ service.interceptors.response.use(
     )
 );
 
+// GET/POST/PUT/DELETE 最终都走这里，减少重复 try/catch 和实例调用代码。
 const request = async (method, url, { params, data, config } = {}) => {
   try {
     return await service.request({
@@ -69,6 +74,7 @@ const request = async (method, url, { params, data, config } = {}) => {
 
 export const GET = (url, params) => request("get", url, { params });
 
+// 地图 geojson 这类静态资源不走业务 baseURL，所以保留一个无前缀请求方法。
 export const GETNOBASE = async (url, params) => {
   try {
     const response = await axios.get(url, { params });
@@ -87,6 +93,7 @@ export const DELETE = (url, params) =>
     data: params,
   });
 
+// 上传接口额外提供取消上传和进度回调，方便页面做上传反馈。
 export const FILESubmit = async (url, params, config = {}) => {
   try {
     return await service.post(url, params, {
@@ -113,6 +120,7 @@ export const FILESubmit = async (url, params, config = {}) => {
   }
 };
 
+// 下载接口保留 method / responseType 可配置，兼容文件流和导出场景。
 export const FILE = async (config = {}, body, params) => {
   try {
     return await service.request({

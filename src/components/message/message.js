@@ -2,6 +2,7 @@ import Vue from "vue";
 import Main from "./message.vue";
 import { isObject, isVNode } from "@/lib/types";
 
+// 通过 Vue.extend 动态创建一个全局消息实例，整个页面复用同一个弹层。
 const MessageConstructor = Vue.extend(Main);
 let instance = null;
 
@@ -19,6 +20,7 @@ const createMessage = (options) => {
     instance.$mount();
   }
 
+  // 由消息组件自己在关闭时回调 destroy，保证 DOM 和实例一起释放。
   instance.destroy = () => {
     document.body.removeChild(instance.$el);
     instance.$destroy();
@@ -31,6 +33,7 @@ const createMessage = (options) => {
   return instance;
 };
 
+// 提供 success / warning / info / error 的快捷调用形式，业务侧直接传字符串即可。
 ["success", "warning", "info", "error"].forEach((type) => {
   createMessage[type] = (options) => {
     if (isObject(options) && !isVNode(options)) {
